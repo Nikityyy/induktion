@@ -73,7 +73,7 @@ const refit = () => requestAnimationFrame(() => { heroFit(); fit(document); plac
 
 // ---------- Speicher ----------
 const KEY = "induktion.v1";
-const defaults = () => ({ stats: {}, wrong: [], total: 0, streak: 0, best: 0, last: "", done: "", prefs: { cat: "", lvl: 0, hap: true, theme: "hell" } });
+const defaults = () => ({ stats: {}, wrong: [], total: 0, streak: 0, best: 0, last: "", done: "", prefs: { cat: "", lvl: 0, hap: true, theme: "system" } });
 const S = (() => { try { const d = defaults(), s = JSON.parse(localStorage.getItem(KEY)) ?? {}; return { ...d, ...s, prefs: { ...d.prefs, ...s.prefs } }; } catch { return defaults(); } })();
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch { /* privater Modus */ } };
 setHaptics(S.prefs.hap);
@@ -111,9 +111,8 @@ function route() {
 }
 const pickNew = () => randomTask({ cat: S.prefs.cat || undefined, lvl: S.prefs.lvl || undefined });
 const go = (task) => { location.hash = `#/t/${task.id}`; };
-const mount = (html, title = "") => {
+const mount = (html) => {
   view.innerHTML = html;
-  $("#navTitle").textContent = title;
   view.focus({ preventScroll: true });
   $$("[data-blur]", view).forEach((el) => blurText(el));
   fit(view);
@@ -293,7 +292,7 @@ function viewProgress() {
     ${iosHint ? '<p class="ios-hint">Für das App-Gefühl auf dem iPhone: in Safari auf Teilen tippen, dann „Zum Home-Bildschirm“.</p>' : ""}
     <div class="set"><span>Fortschritt zurücksetzen</span><button class="lnk" id="reset" type="button">Löschen</button></div>`, "Dein Fortschritt");
   $$("[data-open]").forEach((b) => (b.onclick = () => (location.hash = `#/t/${b.dataset.open}`)));
-  $$("[data-theme]").forEach((b) => (b.onclick = () => { S.prefs.theme = b.dataset.theme; save(); applyTheme(); $$("[data-theme]").forEach((x) => x.classList.toggle("on", x === b)); }));
+  $$("button[data-theme]").forEach((b) => (b.onclick = () => { S.prefs.theme = b.dataset.theme; save(); applyTheme(); $$("button[data-theme]").forEach((x) => x.classList.toggle("on", x === b)); }));
   $("#hap").onchange = (e) => { S.prefs.hap = e.target.checked; setHaptics(S.prefs.hap); save(); haptic("success"); };
   $("#inst")?.addEventListener("click", async () => { installEv?.prompt(); installEv = null; viewProgress(); });
   $("#reset").onclick = () => confirmSheet("Dein gesamter Fortschritt wird gelöscht.", "Fortschritt löschen", () => { Object.assign(S, defaults(), { prefs: S.prefs, last: S.last }); save(); viewProgress(); });
@@ -337,8 +336,7 @@ addEventListener("hashchange", () => (document.startViewTransition && !calm.matc
 addEventListener("resize", refit);
 document.fonts?.addEventListener?.("loadingdone", refit);
 document.fonts?.ready.then(refit);
-gradualBlur("top", { height: "calc(var(--sat) + 2.4rem)", strength: 1.2 });
-gradualBlur("bottom", { height: "calc(var(--sab) + 8.5rem)", strength: 1.8 });
+gradualBlur("top", { height: "calc(var(--sat) + 2.4rem)", strength: 0.9, layers: 1 });
 applyTheme();
 initHaptics();
 addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); installEv = e; });

@@ -7,7 +7,7 @@
   --ground: #F5F6F8; --raised: #FFFFFF;
   --ink: #15171C; --ink-2: #474C57; --ink-3: #5E6470; --rule: rgba(21, 23, 28, 0.1);
   --accent: #E8472B; --accent-text: #C23A20;
-  --glass: rgba(255, 255, 255, 0.7); --glass-on: rgba(21, 23, 28, 0.07);
+  --edge: rgba(255, 255, 255, 0.9); --glass: rgba(255, 255, 255, 0.7); --glass-on: rgba(21, 23, 28, 0.07);
   --shadow: 0 1px 2px rgba(20, 28, 48, 0.05), 0 18px 36px -22px rgba(20, 28, 48, 0.28);
   --scrim: rgba(245, 246, 248, 0.9);
 
@@ -29,7 +29,7 @@ html[data-theme="nacht"] {
   --ground: #0D1015; --raised: #1A1E26;
   --ink: #F2F3F5; --ink-2: #B4BAC6; --ink-3: #8D94A2; --rule: rgba(255, 255, 255, 0.12);
   --accent: #FF6A4A; --accent-text: #FF8B70;
-  --glass: rgba(40, 44, 54, 0.62); --glass-on: rgba(255, 255, 255, 0.12);
+  --edge: transparent; --glass: rgba(40, 44, 54, 0.62); --glass-on: rgba(255, 255, 255, 0.12);
   --shadow: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 18px 36px -22px rgba(0, 0, 0, 0.7);
   --scrim: rgba(13, 16, 21, 0.9);
   --color-base-300: #2A3040;
@@ -53,7 +53,7 @@ main:focus-visible { outline: none; }
 body:not([data-view="ueben"]) { padding-top: calc(var(--sat) + 28px); }
 svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: none; }
 
-.gb { transform: translateZ(0); position: fixed; left: 0; right: 0; z-index: 30; pointer-events: none; isolation: isolate; }
+.gb { position: fixed; left: 0; right: 0; z-index: 30; pointer-events: none; isolation: isolate; }
 .gb > div { position: absolute; inset: 0; }
 .gb-top { top: 0; } .gb-bottom { bottom: 0; }
 
@@ -66,7 +66,7 @@ body:not([data-view="ueben"]) .wm { visibility: hidden; }
 body:not([data-view="ueben"]) #topicBtn { visibility: hidden; }
 
 /* ---------- Tab-Leiste (Glas, Navigation) ---------- */
-.tabbar { position: fixed; z-index: 40; left: 50%; transform: translateX(-50%); bottom: calc(var(--sab) + 12px); width: min(calc(100% - 2 * var(--m)), var(--col)); height: 62px; padding: 6px; border-radius: 31px; display: flex; gap: 4px; background: var(--glass); -webkit-backdrop-filter: blur(22px) saturate(1.3); backdrop-filter: blur(22px) saturate(1.3); box-shadow: 0 10px 30px rgba(20, 28, 48, 0.12), inset 0 0.5px 0 rgba(255, 255, 255, 0.9); }
+.tabbar { position: fixed; z-index: 40; left: 50%; transform: translateX(-50%); bottom: calc(var(--sab) + 12px); width: min(calc(100% - 2 * var(--m)), var(--col)); height: 62px; padding: 6px; border-radius: 31px; display: flex; gap: 4px; background: var(--glass); -webkit-backdrop-filter: blur(22px) saturate(1.3); backdrop-filter: blur(22px) saturate(1.3); box-shadow: 0 10px 30px rgba(20, 28, 48, 0.12), inset 0 0.5px 0 var(--edge); }
 .tabbar a { flex: 1; border-radius: 25px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 0.5882rem; font-weight: 600; color: var(--ink-3); text-decoration: none; transition: background 0.25s, color 0.25s; }
 .tabbar a svg.i { width: 22px; height: 22px; }
 .tabbar a.on { background: var(--glass-on); color: var(--ink); }
@@ -140,7 +140,7 @@ h1 em { font-style: italic; }
 .rate .msg { margin: 12px 0 0; font-size: 0.8824rem; color: var(--ink-2); min-height: 22px; }
 
 /* ---------- Pin-Leiste (Glas) ---------- */
-.pin { position: fixed; z-index: 41; left: 50%; transform: translateX(-50%); top: calc(var(--sat) + 6px); width: min(calc(100% - 2 * var(--m)), var(--col)); height: 62px; border-radius: 31px; padding: 0 18px 0 10px; display: flex; align-items: center; gap: 10px; text-align: left; background: var(--glass); -webkit-backdrop-filter: blur(22px) saturate(1.3); backdrop-filter: blur(22px) saturate(1.3); box-shadow: 0 10px 30px rgba(20, 28, 48, 0.12), inset 0 0.5px 0 rgba(255, 255, 255, 0.9); }
+.pin { position: fixed; z-index: 41; left: 50%; transform: translateX(-50%); top: calc(var(--sat) + 6px); width: min(calc(100% - 2 * var(--m)), var(--col)); height: 62px; border-radius: 31px; padding: 0 18px 0 10px; display: flex; align-items: center; gap: 10px; text-align: left; background: var(--glass); -webkit-backdrop-filter: blur(22px) saturate(1.3); backdrop-filter: blur(22px) saturate(1.3); box-shadow: 0 10px 30px rgba(20, 28, 48, 0.12), inset 0 0.5px 0 var(--edge); }
 .pin[hidden] { display: none; }
 .pin .up { width: 40px; height: 40px; border-radius: 50%; background: var(--glass-on); display: grid; place-items: center; flex: none; } .pin .up svg { width: 18px; height: 18px; stroke-width: 2.2; }
 .pin .pt { min-width: 0; flex: 1; overflow: hidden; } .pin small { display: block; font-size: 0.6471rem; line-height: 0.7059rem; color: var(--ink-3); margin-bottom: 2px; }
@@ -207,7 +207,6 @@ h2.sec { margin: 40px 0 4px; font: 400 1.6471rem/1.1 var(--serif); letter-spacin
 @media (min-width: 720px) { h1.page, .tt h1 { font-size: 3.2941rem; } .formula { font-size: 2.3529rem; } }
 
 /* ---------- iOS-Bedienelemente ---------- */
-.navtitle { position: absolute; left: 50%; top: calc(var(--sat) + 8px); height: 44px; transform: translateX(-50%); display: flex; align-items: center; font: 600 1rem/1 var(--ui); letter-spacing: -0.2px; opacity: var(--p, 0); pointer-events: none; max-width: 84%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 body[data-view="ueben"] .wm { transition: opacity 0.2s; opacity: calc(1 - var(--p, 0)); }
 .sw { -webkit-appearance: none; appearance: none; flex: none; width: 51px; height: 31px; border-radius: 16px; border: 0; background: rgba(120, 120, 128, 0.32); position: relative; cursor: pointer; transition: background 0.25s; }
 .sw::after { content: ""; position: absolute; top: 2px; left: 2px; width: 27px; height: 27px; border-radius: 50%; background: #fff; box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15), 0 1px 1px rgba(0, 0, 0, 0.16); transition: transform 0.3s var(--spring); }
