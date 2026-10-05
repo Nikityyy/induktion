@@ -983,6 +983,14 @@ export const CATS = {
   prod: "Produkte",
   stark: "Stärkere Aussage",
 };
+// Themen wie in der PDF (Kapitel 2 bis 6)
+export const CAT_INFO = {
+  summen: { name: "Formeln mit Summen", tip: "Eine Summenformel beweisen. Trick: den letzten Summanden abspalten." },
+  ungl: { name: "Ungleichungen", tip: "Eine Ungleichung ab einem Startwert beweisen. Trick: Annahme einsetzen, Rest abschätzen." },
+  teil: { name: "Teilbarkeit", tip: "Zeigen, dass ein Term durch eine Zahl teilbar ist. Trick: Annahme als $d\cdot m$ schreiben." },
+  prod: { name: "Formeln mit Produkten", tip: "Eine Produktformel beweisen. Trick: den letzten Faktor abspalten, dann kürzen." },
+  stark: { name: "Manchmal klappt es nicht", tip: "Die Aussage ist zu schwach für Induktion. Trick: eine stärkere Aussage beweisen und folgern." },
+};
 const REG = [
   { key: "sum-arith", cat: "summen", lvl: 1, title: "Summenformel", fn: sumArith },
   { key: "sum-poly", cat: "summen", lvl: 2, title: "Summenformel", fn: sumPoly },
