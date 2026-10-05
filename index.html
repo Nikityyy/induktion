@@ -1,24 +1,25 @@
 <!doctype html>
 <!-- © 2026 Nikita Berger -->
-<html lang="de" data-theme="elfenbein">
+<html lang="de" data-theme="hell">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Induktion – Aufgaben üben</title>
-  <meta name="description" content="Aufgaben zur vollständigen Induktion, jedes Mal neu generiert, mit Lösungsweg und Lösung." />
+  <meta name="description" content="Aufgaben zur vollständigen Induktion, jedes Mal neu erzeugt, mit Lösungsweg und Lösung." />
   <meta name="author" content="Nikita Berger" />
-  <meta name="theme-color" content="#f4f4f2" />
+  <meta name="theme-color" content="#F5F6F8" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="format-detection" content="telephone=no" />
   <meta name="apple-mobile-web-app-title" content="Induktion" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
@@ -27,31 +28,37 @@
   <script type="module" src="js/app.js"></script>
 </head>
 <body>
-  <div class="bg" aria-hidden="true"><i class="b1"></i><i class="b2"></i><i class="b3"></i><i class="b4"></i></div>
-
-  <header class="top">
-    <a class="brand" href="#/" aria-label="Induktion, zur Übung"><span id="brand" class="circ">induktion</span></a>
-    <button id="install" class="pill" hidden>Installieren</button>
+  <header class="topbar" id="topbar">
+    <a class="wm" href="#/" id="brand" aria-label="Induktion, zur Übung">induktion</a>
+    <span class="navtitle" id="navTitle" aria-hidden="true"></span>
+    <button class="gbtn" id="topicBtn" type="button" aria-label="Thema wählen" aria-haspopup="dialog">
+      <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg>
+    </button>
   </header>
 
-  <main id="view" tabindex="-1" aria-live="polite"></main>
+  <button class="pin" id="pin" type="button" hidden aria-label="Zurück zur Aufgabe">
+    <span class="up"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></span>
+    <span class="pt"><small>Zu beweisen</small><span class="f" id="pinF"></span></span>
+    <span class="n" id="pinN"></span>
+  </button>
 
-  <div class="cta-wrap" id="ctaWrap"><button class="btn cta" id="cta" type="button">Lösungsweg zeigen</button></div>
+  <main id="view" tabindex="-1"></main>
 
-  <nav class="dock dock-glass" aria-label="Hauptnavigation">
+  <div class="cta-wrap" id="ctaWrap"><button class="cta" id="cta" type="button"></button></div>
+
+  <nav class="tabbar" aria-label="Hauptnavigation">
     <a href="#/" data-nav="ueben">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16l-1 4z"/><path d="M14 7l3 3"/></svg>
-      <span class="dock-label">Üben</span>
+      <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16l-1 4z"/><path d="M14 7l3 3"/></svg><span>Üben</span>
     </a>
     <a href="#/lernen" data-nav="lernen">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v15H5.5A1.5 1.5 0 0 0 4 20.5z"/><path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H13v15h5.5a1.5 1.5 0 0 1 1.5 1.5z"/></svg>
-      <span class="dock-label">Lernen</span>
+      <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v15H5.5A1.5 1.5 0 0 0 4 20.5z"/><path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H13v15h5.5a1.5 1.5 0 0 1 1.5 1.5z"/></svg><span>Lernen</span>
     </a>
     <a href="#/fortschritt" data-nav="fortschritt">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-9M12 20V5M19 20v-7"/></svg>
-      <span class="dock-label">Fortschritt</span>
+      <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-9M12 20V5M19 20v-7"/></svg><span>Fortschritt</span>
     </a>
   </nav>
+
+  <dialog id="sheet" class="modal modal-bottom" aria-label="Thema wählen"></dialog>
 
   <noscript><p style="padding:2rem">Diese App braucht JavaScript, um Aufgaben zu erzeugen.</p></noscript>
 </body>

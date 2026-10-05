@@ -1,6 +1,6 @@
 // © 2026 Nikita Berger
 // App-Shell wird vorab gecacht, CDN-Dateien (daisyUI, KaTeX, Fonts, web-haptics) beim ersten Laden.
-const V = "induktion-v1";
+const V = "induktion-v2";
 const SHELL = ["./", "index.html", "css/app.css", "js/app.js", "js/gen.js", "js/core.js", "js/fx.js", "manifest.webmanifest", "icons/icon.svg", "icons/icon-192.png", "icons/icon-512.png", "icons/apple-touch-icon.png"];
 
 self.addEventListener("install", (e) => e.waitUntil(caches.open(V).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting())));

@@ -3,10 +3,12 @@
 
 const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 
-// Wörter blenden nacheinander aus der Unschärfe ein (Animation in app.css: .bt)
-export function blurText(el, text = el.textContent) {
-  el.setAttribute("aria-label", text);
-  el.innerHTML = text.split(" ").map((w, i) => `<span class="bt" aria-hidden="true" style="--i:${i}">${esc(w)}</span>`).join(" ");
+// Wörter blenden nacheinander aus der Unschärfe ein (Animation in app.css: .bt). Kursives <em> bleibt erhalten.
+export function blurText(el) {
+  el.setAttribute("aria-label", el.textContent);
+  let i = 0;
+  const words = (t) => t.split(/(\s+)/).map((w) => (/^\s*$/.test(w) ? w : `<span class="bt" aria-hidden="true" style="--i:${i++}">${esc(w)}</span>`)).join("");
+  el.innerHTML = [...el.childNodes].map((n) => (n.nodeType === 3 ? words(n.nodeValue) : `<${n.tagName.toLowerCase()}>${words(n.textContent)}</${n.tagName.toLowerCase()}>`)).join("");
 }
 
 // Mehrere Lagen backdrop-filter mit steigender Stärke, jede mit eigener Maske: weicher Unschärfe-Verlauf.
