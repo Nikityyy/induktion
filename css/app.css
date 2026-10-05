@@ -108,12 +108,16 @@ h1 em { font-style: italic; }
   .tipwrap::before { content: ""; position: absolute; inset: -22px -24px -14px; z-index: -1; background: radial-gradient(closest-side, var(--scrim), transparent); }
 }
 
+.tipwrap.flow { position: static; transform: none; width: auto; margin-top: 18px; }
+.tipwrap.flow::before { display: none; }
+
 /* ---------- Lösungsweg ---------- */
 .sol { display: grid; grid-template-columns: minmax(0, 1fr); margin-top: 22px; }
 .sol:empty { display: none; }
 .sol-step { display: grid; grid-template-columns: 36px minmax(0, 1fr); padding: 20px 0 22px; border-top: var(--hair) solid var(--rule); scroll-margin-top: 92px; transition: opacity 0.3s; }
 .sol-step:first-child { border-top: 0; }
 .sol-step.old { opacity: 0.74; } .sol-step.old h2 { cursor: pointer; }
+.sol-step h2[role="button"]:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
 .sol-step.collapsed { padding: 14px 0; } .sol-step.collapsed .sb > :not(h2) { display: none; } .sol-step.collapsed h2 { font-size: 1.2941rem; margin: 0; } .sol-step.collapsed .no { font-size: 1.2941rem; }
 .sol-step .no { font: 400 1.6471rem/1.05 var(--serif); color: var(--accent-text); }
 .sol-step h2 { margin: 0 0 6px; font: 400 1.6471rem/1.05 var(--serif); letter-spacing: -0.01em; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }

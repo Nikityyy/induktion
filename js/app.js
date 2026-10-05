@@ -44,11 +44,17 @@ function fit(root = document) {
   const f = $("#pinF");
   if (f && !$("#pin").hidden) { f.style.transform = ""; const w = f.parentElement.clientWidth, n = f.scrollWidth; if (n > w) f.style.transform = `scale(${Math.max(0.6, w / n)})`; }
 }
-const refit = () => requestAnimationFrame(() => fit(document));
+function placeTip() {
+  const tip = $("#tip"), tile = $("#tile");
+  if (!tip || !tile || tip.hidden) return;
+  tip.classList.remove("flow");
+  if (getComputedStyle(tip).position === "fixed" && tile.getBoundingClientRect().bottom + 12 > tip.getBoundingClientRect().top) tip.classList.add("flow");
+}
+const refit = () => requestAnimationFrame(() => { fit(document); placeTip(); });
 
 // ---------- Speicher ----------
 const KEY = "induktion.v1";
-const defaults = () => ({ stats: {}, wrong: [], total: 0, streak: 0, best: 0, last: "", prefs: { cat: "", lvl: 0, hap: true, theme: "hell" } });
+const defaults = () => ({ stats: {}, wrong: [], total: 0, streak: 0, best: 0, last: "", done: "", prefs: { cat: "", lvl: 0, hap: true, theme: "hell" } });
 const S = (() => { try { const d = defaults(), s = JSON.parse(localStorage.getItem(KEY)) ?? {}; return { ...d, ...s, prefs: { ...d.prefs, ...s.prefs } }; } catch { return defaults(); } })();
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch { /* privater Modus */ } };
 setHaptics(S.prefs.hap);
@@ -78,7 +84,9 @@ function route() {
   window.scrollTo({ top: 0, behavior: "instant" });
   if (v === "lernen") return viewLearn();
   if (v === "fortschritt") return viewProgress();
-  try { cur = makeTask(a === "t" && b ? b : S.last); } catch { cur = pickNew(); }
+  const explicit = a === "t" && b;
+  try { cur = makeTask(explicit ? b : S.last); } catch { cur = pickNew(); }
+  if (!explicit && cur.id === S.done) cur = pickNew();
   if (a !== "t" || b !== cur.id) history.replaceState(null, "", `#/t/${cur.id}`);
   viewTask();
 }
@@ -128,6 +136,7 @@ function viewTask() {
   io = new IntersectionObserver(([e]) => { tileVisible = e.isIntersecting; updatePin(); }, { rootMargin: "-90px 0px 0px 0px" });
   io.observe($("#tile"));
   $("#pinF").innerHTML = km(t.claim);
+  placeTip();
 }
 
 function showHint() {
@@ -139,28 +148,38 @@ function showHint() {
   if (more) $("#hintb").onclick = showHint;
   haptic("nudge");
   fit($("#tip"));
+  placeTip();
 }
 
 function setPin(on) { pin.hidden = !on; document.body.classList.toggle("pinned", on); if (on) refit(); }
 function updatePin() { setPin(!!st && st.revealed > 0 && !tileVisible); }
 pin.onclick = () => { window.scrollTo({ top: 0, behavior: "smooth" }); haptic("tap"); };
 
+function collapse(step) {
+  step.classList.add("old", "collapsed");
+  const h = $("h2", step);
+  h.tabIndex = 0; h.setAttribute("role", "button"); h.setAttribute("aria-expanded", "false");
+  const toggle = () => { const open = step.classList.toggle("collapsed") === false; h.setAttribute("aria-expanded", String(open)); haptic("tap"); };
+  h.onclick = toggle;
+  h.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } };
+}
+
 function reveal() {
   const i = st.revealed, b = cur.blocks[i], n = cur.blocks.length, sol = $("#sol");
   $("#tip").hidden = true;
   const prev = $(".sol-step:last-of-type", sol);
-  if (prev) prev.classList.add("old", "collapsed");
+  if (prev) collapse(prev);
   const el = document.createElement("section");
   el.className = "sol-step focus";
   el.innerHTML = `<span class="no" aria-hidden="true">${i + 1}</span><div class="sb"><h2><span>${b.h}</span><small>${i + 1} von ${n}</small></h2>${wrapItems(b.items)}</div>`;
   sol.append(el);
   fit(el);
-  $("h2", el).onclick = () => { if (el.classList.contains("old")) el.classList.toggle("collapsed"); };
   $$("#segs i")[i]?.classList.add("on");
   el.scrollIntoView({ behavior: "smooth", block: "start" });
   st.revealed++;
   const last = st.revealed === n;
   haptic(last ? "success" : "nudge");
+  if (last) { S.done = cur.id; save(); }
   $("#pinN").textContent = `${st.revealed} / ${n}`;
   updatePin();
   if (last) {
@@ -310,8 +329,8 @@ addEventListener("hashchange", () => (document.startViewTransition && !calm.matc
 addEventListener("resize", refit);
 document.fonts?.addEventListener?.("loadingdone", refit);
 document.fonts?.ready.then(refit);
-gradualBlur("top", { height: "4.25rem", strength: 1.2 });
-gradualBlur("bottom", { height: "8.5rem", strength: 1.8 });
+gradualBlur("top", { height: "calc(env(safe-area-inset-top) + 3.8rem)", strength: 1.2 });
+gradualBlur("bottom", { height: "calc(env(safe-area-inset-bottom) + 8.5rem)", strength: 1.8 });
 applyTheme();
 initHaptics();
 addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); installEv = e; });

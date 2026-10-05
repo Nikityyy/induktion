@@ -1,6 +1,7 @@
 // © 2026 Nikita Berger
 // App-Shell wird vorab gecacht, CDN-Dateien (daisyUI, KaTeX, Fonts, web-haptics) beim ersten Laden.
-const V = "induktion-v2";
+// Nach jeder Änderung an den Dateien V erhöhen, dann holt sich jedes Gerät die neue Fassung geschlossen.
+const V = "induktion-v3";
 const SHELL = ["./", "index.html", "css/app.css", "js/app.js", "js/gen.js", "js/core.js", "js/fx.js", "manifest.webmanifest", "icons/icon.svg", "icons/icon-192.png", "icons/icon-512.png", "icons/apple-touch-icon.png"];
 
 self.addEventListener("install", (e) => e.waitUntil(caches.open(V).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting())));
@@ -10,8 +11,9 @@ self.addEventListener("activate", (e) => e.waitUntil(caches.keys().then((ks) => 
 self.addEventListener("fetch", (e) => {
   if (e.request.method !== "GET") return;
   e.respondWith(caches.open(V).then(async (c) => {
-    const hit = await c.match(e.request, { ignoreSearch: false });
-    const net = fetch(e.request).then((r) => { if (r.ok || r.type === "opaque") c.put(e.request, r.clone()); return r; }).catch(() => hit);
+    const hit = await c.match(e.request);
+    const net = fetch(e.request).then((r) => { if (r.status === 200 || r.type === "opaque") c.put(e.request, r.clone()).catch(() => {}); return r; }).catch(() => hit);
+    if (hit) e.waitUntil(net);
     return hit || net;
   }));
 });
