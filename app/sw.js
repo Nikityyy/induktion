@@ -1,8 +1,8 @@
 // © 2026 Nikita Berger
 // App-Shell wird vorab gecacht, CDN-Dateien (daisyUI, KaTeX, Fonts, web-haptics) beim ersten Laden.
 // Nach jeder Änderung an den Dateien V erhöhen, dann holt sich jedes Gerät die neue Fassung geschlossen.
-const V = "induktion-v20";
-const SHELL = ["./", "index.html", "css/app.css", "js/app.js", "js/gen.js", "js/core.js", "js/fx.js", "manifest.webmanifest", "icons/icon.svg", "icons/icon-192.png", "icons/icon-512.png", "icons/home-icon.png"];
+const V = "induktion-v21";
+const SHELL = ["./", "index.html", "css/app.css", "js/app.js", "js/gen.js", "js/core.js", "js/fx.js", "manifest.webmanifest", "icons/icon.svg", "icons/icon-192.png", "icons/icon-512.png", "icons/apple-touch-icon.png"];
 
 self.addEventListener("install", (e) => e.waitUntil(caches.open(V).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting())));
 self.addEventListener("activate", (e) => e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== V).map((k) => caches.delete(k)))).then(() => self.clients.claim())));
