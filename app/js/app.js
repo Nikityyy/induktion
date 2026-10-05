@@ -327,7 +327,7 @@ addEventListener("hashchange", () => (document.startViewTransition && !calm.matc
 addEventListener("resize", refit);
 document.fonts?.addEventListener?.("loadingdone", refit);
 document.fonts?.ready.then(refit);
-gradualBlur("top", { height: "calc(var(--sat) + 3.8rem)", strength: 1.2 });
+gradualBlur("top", { height: "calc(var(--sat) + 1.6rem)", strength: 1.2 });
 gradualBlur("bottom", { height: "calc(var(--sab) + 8.5rem)", strength: 1.8 });
 applyTheme();
 initHaptics();
