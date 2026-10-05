@@ -92,6 +92,8 @@ const setCta = (t) => { cta.innerHTML = `<span>${t}</span><i>${ARROW}</i>`; };
 let cur = null, st = null, io = null, tileVisible = true, installEv = null;
 const iosHint = /iphone|ipad/i.test(navigator.userAgent) && !navigator.standalone && !matchMedia("(display-mode: standalone)").matches;
 
+const calm = matchMedia("(prefers-reduced-motion: reduce)");
+
 // ---------- Routing ----------
 function route() {
   const [, a, b] = (location.hash.slice(1) || "/").split("/");
@@ -221,7 +223,18 @@ function rate(r) {
   $$("[data-r]").forEach((b) => (b.disabled = true));
   $("#ratemsg").textContent = r === "ok" ? (S.streak > 1 ? `${S.streak} in Folge.` : "Gespeichert.") : "Gespeichert. Du findest sie unter Fortschritt.";
 }
-cta.onclick = () => (!cur || !st ? 0 : st.revealed < cur.blocks.length ? reveal() : go(pickNew()));
+// Vor der nächsten Aufgabe erst sanft nach oben scrollen, dann wechseln (kein Springen)
+const toTop = () => new Promise((done) => {
+  if (scrollY < 40 || calm.matches) return done();
+  scrollTo({ top: 0, behavior: "smooth" });
+  const t0 = performance.now(), tick = () => (scrollY < 2 || performance.now() - t0 > 500 ? done() : requestAnimationFrame(tick));
+  tick();
+});
+cta.onclick = async () => {
+  if (!cur || !st) return;
+  if (st.revealed < cur.blocks.length) return reveal();
+  cta.disabled = true; await toTop(); cta.disabled = false; go(pickNew());
+};
 
 // ---------- Thema wählen ----------
 function openSheet() {
@@ -332,7 +345,6 @@ $$(".tabbar a").forEach((a) => a.addEventListener("click", (e) => { if (a.classL
 document.addEventListener("change", (e) => { if (e.target.matches(".sw")) haptic("tap"); });
 // iOS löst Haptik nur innerhalb einer echten Berührung (click) aus, nicht bei pointerdown
 document.addEventListener("click", (e) => { if (e.target.closest("button:not(:disabled), .tabbar a") && !hapticAge(60)) haptic("tap"); });
-const calm = matchMedia("(prefers-reduced-motion: reduce)");
 addEventListener("hashchange", () => (document.startViewTransition && !calm.matches ? document.startViewTransition(route) : route()));
 addEventListener("resize", refit);
 document.fonts?.addEventListener?.("loadingdone", refit);
