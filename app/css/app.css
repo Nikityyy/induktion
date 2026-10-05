@@ -53,7 +53,7 @@ main:focus-visible { outline: none; }
 body:not([data-view="ueben"]) { padding-top: calc(var(--sat) + 28px); }
 svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: none; }
 
-.gb { position: fixed; left: 0; right: 0; z-index: 30; pointer-events: none; isolation: isolate; }
+.gb { transform: translateZ(0); position: fixed; left: 0; right: 0; z-index: 30; pointer-events: none; isolation: isolate; }
 .gb > div { position: absolute; inset: 0; }
 .gb-top { top: 0; } .gb-bottom { bottom: 0; }
 
@@ -148,7 +148,16 @@ h1 em { font-style: italic; }
 .pin .n { flex: none; white-space: nowrap; font-size: 0.7647rem; font-weight: 600; color: var(--ink-2); font-variant-numeric: tabular-nums; }
 
 /* ---------- Sheet (Thema wählen) ---------- */
-.modal { background: rgba(13, 16, 21, 0.34); }
+#sheet.modal { background: rgba(13, 16, 21, 0.34); transition: none; }
+#sheet[open] { opacity: 1; visibility: visible; pointer-events: auto; animation: sh-fade 0.3s ease both; }
+#sheet[open] > :first-child { animation: sh-up 0.42s cubic-bezier(0.2, 0.9, 0.25, 1) both; }
+#sheet.closing { animation: sh-fadeout 0.26s ease both; pointer-events: none; }
+#sheet.closing > :first-child { animation: sh-down 0.26s cubic-bezier(0.5, 0, 0.9, 0.6) both; }
+#sheet.swiped > :first-child { animation: none; }
+@keyframes sh-fade { from { background-color: transparent; } }
+@keyframes sh-fadeout { from { background-color: rgba(13, 16, 21, 0.34); } to { background-color: transparent; } }
+@keyframes sh-up { from { transform: translateY(105%); } }
+@keyframes sh-down { to { transform: translateY(105%); } }
 .sheet-box { max-width: var(--col); width: calc(100% - 16px); margin: 0 8px calc(var(--sab) + 8px); border-radius: 32px; padding: 10px var(--m) 14px; background: color-mix(in srgb, var(--raised) 88%, transparent); -webkit-backdrop-filter: blur(28px) saturate(1.4); backdrop-filter: blur(28px) saturate(1.4); box-shadow: 0 -10px 40px rgba(13, 16, 21, 0.25); color: var(--ink); max-height: 86dvh; }
 .grab { width: 36px; height: 5px; border-radius: 3px; background: var(--rule); margin: 0 auto 14px; }
 .sheet-box h2 { margin: 0 0 14px; font: 400 2rem/1 var(--serif); letter-spacing: -0.015em; }
@@ -189,8 +198,8 @@ h2.sec { margin: 40px 0 4px; font: 400 1.6471rem/1.1 var(--serif); letter-spacin
 .empty { margin: 14px 0 0; font-size: 1rem; color: var(--ink-2); }
 
 /* ---------- Titel-Unschärfe (BlurText) ---------- */
-.bt { display: inline-block; padding: 0.14em 0.06em; margin: -0.14em -0.06em; will-change: transform, filter, opacity; animation: bt 0.75s cubic-bezier(0.2, 0.7, 0.2, 1) both; animation-delay: calc(var(--i) * 70ms); }
-@keyframes bt { 0% { filter: blur(10px); opacity: 0; transform: translateY(-14px); } 50% { filter: blur(5px); opacity: 0.5; transform: translateY(4px); } 100% { filter: blur(0); opacity: 1; transform: none; } }
+.bt { display: inline-block; padding: 0.14em 0.06em; margin: -0.14em -0.06em; animation: bt 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) both; animation-delay: calc(var(--i) * 45ms); }
+@keyframes bt { from { filter: blur(8px); opacity: 0; transform: translateY(0.18em); } to { filter: blur(0); opacity: 1; transform: none; } }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }

@@ -234,17 +234,27 @@ function openSheet() {
     ${opt("", "Alle Themen", "Querbeet üben")}${Object.entries(CAT_INFO).map(([k, v]) => opt(k, v.name, v.short)).join("")}</div>
     <form method="dialog" class="modal-backdrop"><button aria-label="Schließen">schließen</button></form>`;
   $$("[data-lvl]", d).forEach((b) => (b.onclick = () => { S.prefs.lvl = +b.dataset.lvl; save(); $$("[data-lvl]", d).forEach((x) => x.classList.toggle("on", x === b)); }));
-  $$("[data-cat]", d).forEach((b) => (b.onclick = () => { S.prefs.cat = b.dataset.cat; save(); d.close(); const t = pickNew(); location.hash === `#/t/${t.id}` ? route() : go(t); }));
+  $$("[data-cat]", d).forEach((b) => (b.onclick = () => { S.prefs.cat = b.dataset.cat; save(); closeSheet(); const t = pickNew(); location.hash === `#/t/${t.id}` ? route() : go(t); }));
   d.showModal();
 }
 $("#topicBtn").onclick = openSheet;
+
+// Sheet weich schließen: erst Animation (Blatt nach unten, Abdunklung blendet aus), dann <dialog>.close()
+function closeSheet(swiped = false) {
+  const d = $("#sheet");
+  if (!d.open || d.classList.contains("closing")) return;
+  d.classList.add("closing"); d.classList.toggle("swiped", swiped);
+  setTimeout(() => { d.close(); d.classList.remove("closing", "swiped"); }, 260);
+}
+$("#sheet").addEventListener("cancel", (e) => { e.preventDefault(); closeSheet(); });
+$("#sheet").addEventListener("click", (e) => { if (e.target.closest(".modal-backdrop")) { e.preventDefault(); closeSheet(); } });
 
 // Aktionsblatt (wie iOS): Warnung oben, rote Aktion, Abbrechen getrennt
 function confirmSheet(text, label, fn) {
   const d = $("#sheet");
   d.innerHTML = `<div class="action"><div class="grp"><p>${text}</p><button class="danger" id="yes" type="button">${label}</button></div><div class="cancel"><button type="button" id="no">Abbrechen</button></div></div><form method="dialog" class="modal-backdrop"><button aria-label="Schließen">schließen</button></form>`;
-  $("#yes").onclick = () => { d.close(); haptic("success"); fn(); };
-  $("#no").onclick = () => d.close();
+  $("#yes").onclick = () => { closeSheet(); haptic("success"); fn(); };
+  $("#no").onclick = closeSheet;
   d.showModal(); haptic("nudge");
 }
 
@@ -258,7 +268,7 @@ $("#sheet").addEventListener("pointerdown", (e) => {
     removeEventListener("pointermove", move); removeEventListener("pointerup", up);
     box.style.transition = "transform 0.3s var(--spring)";
     const fast = dy / (performance.now() - t0) > 0.6;
-    if (dy > 90 || fast) { box.style.transform = "translateY(110%)"; setTimeout(() => { $("#sheet").close(); box.style.transform = ""; }, 180); } else box.style.transform = "";
+    if (dy > 90 || fast) { box.style.transform = "translateY(110%)"; closeSheet(true); } else box.style.transform = "";
   };
   addEventListener("pointermove", move); addEventListener("pointerup", up);
 });
@@ -281,7 +291,7 @@ function viewProgress() {
     <label class="set"><span>Haptisches Feedback</span><input id="hap" type="checkbox" class="sw" ${S.prefs.hap ? "checked" : ""} /></label>
     ${installEv ? '<div class="set"><span>Als App installieren</span><button class="lnk" id="inst" type="button">Installieren</button></div>' : ""}
     ${iosHint ? '<p class="ios-hint">Für das App-Gefühl auf dem iPhone: in Safari auf Teilen tippen, dann „Zum Home-Bildschirm“.</p>' : ""}
-    <div class="set"><span>Fortschritt zurücksetzen</span><button class="lnk" id="reset" type="button">Löschen</button></div>`, "Fortschritt");
+    <div class="set"><span>Fortschritt zurücksetzen</span><button class="lnk" id="reset" type="button">Löschen</button></div>`, "Dein Fortschritt");
   $$("[data-open]").forEach((b) => (b.onclick = () => (location.hash = `#/t/${b.dataset.open}`)));
   $$("[data-theme]").forEach((b) => (b.onclick = () => { S.prefs.theme = b.dataset.theme; save(); applyTheme(); $$("[data-theme]").forEach((x) => x.classList.toggle("on", x === b)); }));
   $("#hap").onchange = (e) => { S.prefs.hap = e.target.checked; setHaptics(S.prefs.hap); save(); haptic("success"); };
@@ -327,7 +337,7 @@ addEventListener("hashchange", () => (document.startViewTransition && !calm.matc
 addEventListener("resize", refit);
 document.fonts?.addEventListener?.("loadingdone", refit);
 document.fonts?.ready.then(refit);
-gradualBlur("top", { height: "calc(var(--sat) + 1.6rem)", strength: 1.2 });
+gradualBlur("top", { height: "calc(var(--sat) + 2.4rem)", strength: 1.2 });
 gradualBlur("bottom", { height: "calc(var(--sab) + 8.5rem)", strength: 1.8 });
 applyTheme();
 initHaptics();
