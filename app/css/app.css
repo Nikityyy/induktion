@@ -48,6 +48,7 @@ main { max-width: calc(var(--col) + 2 * var(--m)); margin: 0 auto; padding: 0 va
 button, a, .tabbar { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; padding: 0; }
 button:active:not(:disabled) { transform: scale(0.97); }
+.seg3 button { transition: background 0.15s, opacity 0.15s; } .seg3 button:active:not(:disabled) { transform: none; } .seg3 button:not(.on):active { background: var(--glass-on); } .seg3 button.on:active { opacity: 0.7; } .seg3 button:focus-visible { outline-offset: -2px; }
 :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 6px; }
 main:focus-visible { outline: none; }
 body:not([data-view="ueben"]) { padding-top: calc(var(--sat) + 28px); }
