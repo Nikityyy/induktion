@@ -1,5 +1,5 @@
 // © 2026 Nikita Berger
-// Effekte: BlurText und GradualBlur (nach reactbits.dev, ohne React) sowie Haptik via web-haptics.
+// Effekte: BlurText und GradualBlur (nach reactbits.dev, ohne React) sowie Haptik (ios-vibrator-pro-max für iOS).
 
 const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 
@@ -22,23 +22,18 @@ export function gradualBlur(position, { height = "4rem" } = {}) {
 }
 
 // ---------- Haptik ----------
-let wh = null, enabled = true;
+// navigator.vibrate gibt es auf Android nativ. Für iOS/Safari ergänzt ios-vibrator-pro-max (CDN, kein Build) die Funktion.
+let enabled = true;
 export const setHaptics = (on) => { enabled = on; };
 export async function initHaptics() {
-  try {
-    const m = await import("https://cdn.jsdelivr.net/npm/web-haptics@0.0.6/+esm");
-    wh = new m.WebHaptics({ debug: /[?&]haptics-debug/.test(location.search) }); // ?haptics-debug: Klickgeräusch am Desktop zum Testen
-  } catch { /* offline oder blockiert: Fallback auf navigator.vibrate */ }
+  try { await import("https://cdn.jsdelivr.net/npm/ios-vibrator-pro-max@3.0.3/+esm"); } catch { /* offline: ohne Haptik */ }
 }
-const FALLBACK = { tap: 8, success: [20, 40, 20], nudge: 15, error: [30, 40, 30, 40, 30] };
+const PATTERNS = { tap: 10, success: [15, 60, 25], nudge: [20, 60, 10], error: [25, 40, 25, 40, 25] };
 // tap | success | nudge | error
 let lastAt = 0;
 export const hapticAge = (ms) => performance.now() - lastAt < ms; // gerade erst eine gezielte Haptik gespielt?
 export function haptic(kind = "tap") {
   if (!enabled) return;
   if (kind !== "tap") lastAt = performance.now();
-  try {
-    if (wh) kind === "tap" ? wh.trigger(10, { intensity: 0.4 }) : wh.trigger(kind);
-    else navigator.vibrate?.(FALLBACK[kind]);
-  } catch { /* Gerät ohne Haptik */ }
+  try { navigator.vibrate?.(PATTERNS[kind]); } catch { /* Gerät ohne Haptik */ }
 }

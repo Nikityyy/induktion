@@ -98,7 +98,7 @@ const calm = matchMedia("(prefers-reduced-motion: reduce)");
 function route() {
   const [, a, b] = (location.hash.slice(1) || "/").split("/");
   const v = a === "lernen" ? "lernen" : a === "fortschritt" ? "fortschritt" : "ueben";
-  document.body.dataset.view = v;
+  document.documentElement.dataset.view = v;
   $$("[data-nav]").forEach((n) => { const on = n.dataset.nav === v; n.classList.toggle("on", on); on ? n.setAttribute("aria-current", "page") : n.removeAttribute("aria-current"); });
   ctaWrap.hidden = v !== "ueben";
   io?.disconnect(); setPin(false);
@@ -172,7 +172,7 @@ function showHint() {
   placeTip();
 }
 
-function setPin(on) { pin.hidden = !on; document.body.classList.toggle("pinned", on); if (on) refit(); }
+function setPin(on) { pin.hidden = !on; document.documentElement.classList.toggle("pinned", on); if (on) refit(); }
 function updatePin() { setPin(!!st && st.revealed > 0 && !tileVisible); }
 pin.onclick = () => { window.scrollTo({ top: 0, behavior: "smooth" }); haptic("tap"); };
 

@@ -34,7 +34,7 @@ Die Themen folgen der PDF „Beweise durch vollständige Induktion“ (Luise Ung
 
 Systemschrift (auf dem iPhone SF Pro) und **Dynamic Type**, großer Titel, der in die Leiste einklappt,
 Glas nur in der Navigation, Sheet zum Wegwischen, Aktionsblatt statt Browser-Dialog, iOS-Schalter,
-sanfte Seitenwechsel und Haptik über [web-haptics](https://www.jsdelivr.com/package/npm/web-haptics).
+sanfte Seitenwechsel und Haptik über [ios-vibrator-pro-max](https://github.com/samdenty/ios-vibrator-pro-max).
 Erneutes Antippen des aktiven Tabs springt nach oben. Auf dem iPhone: in Safari **Teilen → Zum Home-Bildschirm**,
 dann läuft die App im Vollbild.
 
@@ -66,7 +66,7 @@ Alle Pfade sind relativ, die App läuft auch unter `https://<name>.github.io/<re
 
 - [daisyUI 5](https://daisyui.com/docs/cdn/) über CDN (Farben und Sheet-Dialog), Tailwind Browser-Build
 - [KaTeX](https://katex.org) für die Formeln
-- [web-haptics](https://www.jsdelivr.com/package/npm/web-haptics) für Vibrationsfeedback
+- [ios-vibrator-pro-max](https://github.com/samdenty/ios-vibrator-pro-max) für Vibrationsfeedback auf iOS, Android nutzt `navigator.vibrate`
 - BlurText und Blur-Text nach Vorbild von [React Bits](https://reactbits.dev), in reinem JS nachgebaut
 - Eigener Code: `app/js/core.js` (Brüche, Polynome), `app/js/gen.js` (Generatoren), `app/js/app.js` (Oberfläche), `app/js/fx.js` (Effekte, Haptik)
 

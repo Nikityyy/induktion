@@ -42,16 +42,15 @@ html { scroll-behavior: smooth; overscroll-behavior-y: contain; background: var(
 body {
   margin: 0; min-height: 100dvh; background: var(--ground); color: var(--ink); font: 400 1rem/1.35 var(--ui);
   overflow-x: hidden; touch-action: manipulation; -webkit-font-smoothing: antialiased;
-  padding: calc(var(--sat) + 62px) 0 calc(var(--sab) + 150px);
 }
-main { max-width: calc(var(--col) + 2 * var(--m)); margin: 0 auto; padding: 0 var(--m); outline: none; }
+main { max-width: calc(var(--col) + 2 * var(--m)); margin: 0 auto; padding: calc(var(--sat) + 62px) var(--m) calc(var(--sab) + 150px); outline: none; }
 button, a, .tabbar { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; padding: 0; }
 button:active:not(:disabled) { transform: scale(0.97); }
 .seg3 button { transition: background 0.15s, opacity 0.15s; } .seg3 button:active:not(:disabled) { transform: none; } .seg3 button:not(.on):active { background: var(--glass-on); } .seg3 button.on:active { opacity: 0.7; } .seg3 button:focus-visible { outline-offset: -2px; }
 :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 6px; }
 main:focus-visible { outline: none; }
-body:not([data-view="ueben"]) { padding-top: calc(var(--sat) + 28px); }
+html:not([data-view="ueben"]) main { padding-top: calc(var(--sat) + 28px); }
 svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: none; }
 
 .gb { position: fixed; left: 0; right: 0; z-index: 30; pointer-events: none; isolation: isolate; }
@@ -60,11 +59,11 @@ svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-widt
 
 /* ---------- Kopfzeile ---------- */
 .topbar { position: fixed; z-index: 40; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: calc(var(--col) + 2 * var(--m)); height: calc(var(--sat) + 66px); padding: calc(var(--sat) + 8px) var(--m) 0; display: flex; align-items: center; justify-content: space-between; transition: opacity 0.25s; }
-body.pinned .topbar { opacity: 0; pointer-events: none; }
+html.pinned .topbar { opacity: 0; pointer-events: none; }
 .wm { color: var(--ink); text-decoration: none; font: 400 1.5294rem/1 var(--serif); letter-spacing: -0.01em; }
-body:not([data-view="ueben"]) .wm { visibility: hidden; }
+html:not([data-view="ueben"]) .wm { visibility: hidden; }
 .gbtn { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; color: var(--ink); background: var(--raised); box-shadow: var(--shadow); }
-body:not([data-view="ueben"]) #topicBtn { visibility: hidden; }
+html:not([data-view="ueben"]) #topicBtn { visibility: hidden; }
 
 /* ---------- Tab-Leiste (Glas, Navigation) ---------- */
 .tabbar { position: fixed; z-index: 40; left: 50%; transform: translateX(-50%); bottom: calc(var(--sab) + 12px); width: min(calc(100% - 2 * var(--m)), var(--col)); height: 62px; padding: 6px; border-radius: 31px; display: flex; gap: 4px; background: var(--glass); -webkit-backdrop-filter: blur(22px) saturate(1.3); backdrop-filter: blur(22px) saturate(1.3); box-shadow: 0 10px 30px rgba(20, 28, 48, 0.12), inset 0 0.5px 0 var(--edge); }
@@ -217,7 +216,7 @@ h2.sec { margin: 40px 0 4px; font: 400 1.6471rem/1.1 var(--serif); letter-spacin
 @media (min-width: 720px) { h1.page, .tt h1 { font-size: 3.2941rem; } .formula { font-size: 2.3529rem; } }
 
 /* ---------- iOS-Bedienelemente ---------- */
-body[data-view="ueben"] .wm { transition: opacity 0.2s; opacity: calc(1 - var(--p, 0)); }
+html[data-view="ueben"] .wm { transition: opacity 0.2s; opacity: calc(1 - var(--p, 0)); }
 .sw { -webkit-appearance: none; appearance: none; flex: none; width: 51px; height: 31px; border-radius: 16px; border: 0; background: rgba(120, 120, 128, 0.32); position: relative; cursor: pointer; transition: background 0.25s; }
 .sw::after { content: ""; position: absolute; top: 2px; left: 2px; width: 27px; height: 27px; border-radius: 50%; background: #fff; box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15), 0 1px 1px rgba(0, 0, 0, 0.16); transition: transform 0.3s var(--spring); }
 .sw:checked { background: var(--green); } .sw:checked::after { transform: translateX(20px); }
