@@ -1,6 +1,6 @@
 // © 2026 Nikita Berger. Prüft alle Generatoren: Aussage wahr, Rechenkette stimmt für viele Seeds.
-import { GENERATORS, makeTask, relOk } from "../js/gen.js";
-import { fr } from "../js/core.js";
+import { GENERATORS, makeTask, relOk } from "../app/js/gen.js";
+import { fr } from "../app/js/core.js";
 let n = 0, bad = 0;
 const fail = (id, msg) => { bad++; console.log("FAIL", id, msg); };
 for (const g of GENERATORS) {

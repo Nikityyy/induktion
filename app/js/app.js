@@ -26,6 +26,8 @@ function relIndex(tex) {
   }
   return -1;
 }
+// Einzeilig: Summen und Produkte kompakt (Text-Stil, Grenzen neben dem Zeichen), einfache Aussagen groß. Passt es so nicht, bei der Relation umbrechen.
+const oneLine = (tex) => (/\\(sum|prod)/.test(tex) ? `\\textstyle ${tex}` : `\\displaystyle ${tex}`);
 const formulaLines = (tex) => { const i = relIndex(tex); return i < 0 || tex.length < 26 ? [tex] : [`\\displaystyle ${tex.slice(0, i).trim()}`, tex.slice(i).trim()]; };
 
 const MIN_SCALE = 0.55;
@@ -50,7 +52,24 @@ function placeTip() {
   tip.classList.remove("flow");
   if (getComputedStyle(tip).position === "fixed" && tile.getBoundingClientRect().bottom + 12 > tip.getBoundingClientRect().top) tip.classList.add("flow");
 }
-const refit = () => requestAnimationFrame(() => { fit(document); placeTip(); });
+function heroFit() {
+  const f = $("#formula");
+  if (!f || !cur) return;
+  const tex = cur.claim, can = relIndex(tex) >= 0 && tex.length >= 26;
+  const m = f.cloneNode(false);
+  m.removeAttribute("id"); m.classList.add("meas"); m.style.width = f.clientWidth ? `${f.clientWidth}px` : "";
+  m.innerHTML = `<div class="hl">${km(oneLine(tex), true)}</div>`;
+  f.parentElement.append(m);
+  const k = $(".katex", m), ratio = k && k.clientWidth ? k.scrollWidth / k.clientWidth : 1;
+  m.remove();
+  const mode = can && ratio > 1.5 ? "two" : "one";
+  if (f.dataset.mode !== mode) {
+    f.dataset.mode = mode;
+    f.innerHTML = (mode === "two" ? formulaLines(tex) : [oneLine(tex)]).map((l) => `<div class="hl">${km(l, true)}</div>`).join("");
+  }
+  fit(f);
+}
+const refit = () => requestAnimationFrame(() => { heroFit(); fit(document); placeTip(); });
 
 // ---------- Speicher ----------
 const KEY = "induktion.v1";
@@ -125,7 +144,7 @@ function viewTask() {
       <div class="zone-a"><span>Level ${t.lvl} von 3</span><span class="segs" id="segs" aria-hidden="true">${t.blocks.map(() => "<i></i>").join("")}</span></div>
       <div class="zone-b">
         <p class="lead">${rich(lead)}</p>
-        <div class="formula">${formulaLines(t.claim).map((l) => `<div class="hl">${km(l, true)}</div>`).join("")}</div>
+        <div class="formula" id="formula"></div>
         ${t.tail ? `<p class="tail">${rich(t.tail)}</p>` : ""}
       </div>
     </article>
@@ -136,6 +155,7 @@ function viewTask() {
   io = new IntersectionObserver(([e]) => { tileVisible = e.isIntersecting; updatePin(); }, { rootMargin: "-90px 0px 0px 0px" });
   io.observe($("#tile"));
   $("#pinF").innerHTML = km(t.claim);
+  heroFit();
   placeTip();
 }
 
@@ -329,8 +349,8 @@ addEventListener("hashchange", () => (document.startViewTransition && !calm.matc
 addEventListener("resize", refit);
 document.fonts?.addEventListener?.("loadingdone", refit);
 document.fonts?.ready.then(refit);
-gradualBlur("top", { height: "calc(env(safe-area-inset-top) + 3.8rem)", strength: 1.2 });
-gradualBlur("bottom", { height: "calc(env(safe-area-inset-bottom) + 8.5rem)", strength: 1.8 });
+gradualBlur("top", { height: "calc(var(--sat) + 3.8rem)", strength: 1.2 });
+gradualBlur("bottom", { height: "calc(var(--sab) + 8.5rem)", strength: 1.8 });
 applyTheme();
 initHaptics();
 addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); installEv = e; });

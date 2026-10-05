@@ -58,7 +58,7 @@ Kein Build nötig, nur ein statischer Server (wegen Service Worker):
 python -m http.server 8000
 ```
 
-Dann `http://localhost:8000` öffnen.
+Dann `http://localhost:8000` (Landingpage) oder `http://localhost:8000/app/` (die App) öffnen.
 
 ### GitHub Pages
 
@@ -71,8 +71,18 @@ Alle Pfade sind relativ, die App läuft auch unter `https://<name>.github.io/<re
 - [KaTeX](https://katex.org) für die Formeln
 - [web-haptics](https://www.jsdelivr.com/package/npm/web-haptics) für Vibrationsfeedback
 - BlurText und GradualBlur nach Vorbild von [React Bits](https://reactbits.dev), in reinem JS nachgebaut
-- Eigener Code: `js/core.js` (Brüche, Polynome), `js/gen.js` (Generatoren), `js/app.js` (Oberfläche), `js/fx.js` (Effekte, Haptik)
+- Eigener Code: `app/js/core.js` (Brüche, Polynome), `app/js/gen.js` (Generatoren), `app/js/app.js` (Oberfläche), `app/js/fx.js` (Effekte, Haptik)
 
 ## Lizenz
 
 MIT, siehe [LICENSE](LICENSE). Die PDF ist nicht Teil dieses Repositories.
+
+## So sieht es aus
+
+| Aufgabe | Lösungsweg | Thema |
+| --- | --- | --- |
+| <img src="assets/screens/aufgabe.png" width="220"> | <img src="assets/screens/loesungsweg.png" width="220"> | <img src="assets/screens/thema.png" width="220"> |
+
+| Lernen | Fortschritt | Nachtmodus |
+| --- | --- | --- |
+| <img src="assets/screens/lernen.png" width="220"> | <img src="assets/screens/fortschritt.png" width="220"> | <img src="assets/screens/nacht.png" width="220"> |
