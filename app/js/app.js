@@ -99,7 +99,7 @@ function route() {
   const [, a, b] = (location.hash.slice(1) || "/").split("/");
   const v = a === "lernen" ? "lernen" : a === "fortschritt" ? "fortschritt" : "ueben";
   document.documentElement.dataset.view = v;
-  $$("[data-nav]").forEach((n) => { const on = n.dataset.nav === v; n.classList.toggle("on", on); on ? n.setAttribute("aria-current", "page") : n.removeAttribute("aria-current"); });
+  $$("[data-nav]").forEach((n) => { const on = n.dataset.nav === v; n.classList.toggle("on", on); n.setAttribute("aria-selected", String(on)); });
   ctaWrap.hidden = v !== "ueben";
   io?.disconnect(); setPin(false);
   window.scrollTo({ top: 0, behavior: "instant" });
@@ -115,6 +115,7 @@ const pickNew = () => randomTask({ cat: S.prefs.cat || undefined, lvl: S.prefs.l
 const go = (task) => { location.hash = `#/t/${task.id}`; };
 const mount = (html) => {
   view.innerHTML = html;
+  view.classList.remove("enter"); void view.offsetWidth; view.classList.add("enter");
   view.focus({ preventScroll: true });
   $$("[data-blur]", view).forEach((el) => blurText(el));
   fit(view);
@@ -350,11 +351,22 @@ function viewLearn() {
 }
 
 // ---------- Start ----------
+// Berührung, die nur eine auslaufende Scroll-Bewegung stoppt, erzeugt in iOS keinen click: Tab trotzdem wechseln
+{
+  let down = null;
+  const tabAt = (x, y) => $$(".tabbar a").find((a) => { const r = a.getBoundingClientRect(); return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom; });
+  addEventListener("pointerdown", (e) => { down = { x: e.clientX, y: e.clientY, t: performance.now(), a: tabAt(e.clientX, e.clientY) }; }, true);
+  addEventListener("pointerup", (e) => {
+    const d = down; down = null;
+    if (!d || !d.a || Math.hypot(e.clientX - d.x, e.clientY - d.y) > 10 || performance.now() - d.t > 600 || tabAt(e.clientX, e.clientY) !== d.a) return;
+    setTimeout(() => { if (document.documentElement.dataset.view !== d.a.dataset.nav && !d.a.classList.contains("on")) d.a.click(); }, 80);
+  }, true);
+}
 $$(".tabbar a").forEach((a) => a.addEventListener("click", (e) => { if (a.classList.contains("on")) { e.preventDefault(); scrollTo({ top: 0, behavior: "smooth" }); } }));
 document.addEventListener("change", (e) => { if (e.target.matches(".sw")) haptic("tap"); });
 // iOS löst Haptik nur innerhalb einer echten Berührung (click) aus, nicht bei pointerdown
 document.addEventListener("click", (e) => { if (e.target.closest("button:not(:disabled), .tabbar a") && !hapticAge(60)) haptic("tap"); });
-addEventListener("hashchange", () => (document.startViewTransition && !calm.matches ? document.startViewTransition(route) : route()));
+addEventListener("hashchange", route);
 addEventListener("resize", refit);
 document.fonts?.addEventListener?.("loadingdone", refit);
 document.fonts?.ready.then(refit);
