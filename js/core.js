@@ -47,12 +47,6 @@ export class Fr {
 export const fr = (x) => (x instanceof Fr ? x : new Fr(x));
 export const fact = (n) => { let r = 1n; for (let i = 2n; i <= BigInt(n); i++) r *= i; return new Fr(r); };
 
-export const fracTex = (x) => {
-  x = fr(x);
-  const s = x.n < 0n ? "-" : "";
-  return x.isInt ? `${x.n}` : `${s}\\frac{${babs(x.n)}}{${x.d}}`;
-};
-
 // ---------- Polynome (Koeffizienten niedrig -> hoch, als Fr) ----------
 export const poly = (...c) => c.map(fr);
 export const padd = (p, q) => Array.from({ length: Math.max(p.length, q.length) }, (_, i) => fr(p[i] ?? 0).add(q[i] ?? 0));

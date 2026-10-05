@@ -15,12 +15,14 @@ const domTex = (r, n0) => (n0 === 1 ? T`n\in${NN}` : n0 >= 2 && r.chance(0.5) ? 
 
 // Standard-Beweisgerüst: Anfang, Annahme, Schritt, Schluss
 function blocks({ n0, dom, anfang, An, An1, chain, afterStep = [], annahme }) {
-  return [
+  const out = [
     { h: "Induktionsanfang", items: anfang },
     { h: "Induktionsannahme", items: [{ t: "text", s: annahme ?? T`Die Aussage gelte für ein festes (aber beliebiges) $n\ge ${n0}$:` }, { t: "eq", tex: An }] },
     { h: "Induktionsschritt", items: [{ t: "text", s: "Für dieses $n$ ist zu zeigen (Ziel):" }, { t: "eq", tex: An1 }, { t: "text", s: "Rechnung:" }, { t: "chain", ...chain }, ...afterStep] },
     { h: "Schluss", items: [{ t: "text", s: `Nach dem Prinzip der vollständigen Induktion gilt die Behauptung für alle $${dom}$.` }] },
   ];
+  out.dom = dom;
+  return out;
 }
 const hints = (n0, An1, strategy) => [
   { s: `Startwert: Für welches kleinste $n$ soll die Aussage gelten? Setze es im Induktionsanfang ein und prüfe beide Seiten getrennt.` },
@@ -158,8 +160,8 @@ function sumGeo(r) {
 // ---------- Teleskopsummen ----------
 function sumTele(r) {
   const a = r.int(1, 5);
-  const first = (k) => (a === 1 ? k : k === "(n+1)" ? T`${a}(n+1)-${a - 1}` : T`${a}${k}-${a - 1}`);
-  const second = (k) => (k === "(n+1)" ? T`${a === 1 ? "" : a}(n+1)+1` : T`${a === 1 ? "" : a}${k}+1`);
+  const first = (k) => (a === 1 ? k : k === "(n+1)" ? T`${a}(n+1)-${a - 1}` : T`${cdot(a, k)}-${a - 1}`);
+  const second = (k) => (k === "(n+1)" ? T`${a === 1 ? "" : a}(n+1)+1` : T`${cdot(a, k)}+1`);
   const A1 = a === 1 ? "n+1" : `${a}n+1`, A2 = `${a === 1 ? "" : a}n+${a + 1}`;
   const f = (k) => T`\frac{1}{(${first(k)})(${second(k)})}`;
   const fv = (k) => new Fr(1, (a * k - a + 1) * (a * k + 1));
@@ -279,7 +281,7 @@ function sumFact() {
           L("=", T`(n+1)! - 1 + (n+1)\cdot (n+1)!`, "Induktionsannahme einsetzen.", vv),
           L("=", T`(n+1)!\,\bigl(1+(n+1)\bigr) - 1`, "$(n+1)!$ ausklammern.", vv),
           L("=", T`(n+2)\cdot (n+1)! - 1`, "Zusammenfassen: $1+(n+1)=n+2$.", vv),
-          L("=", T`(n+2)! - 1`, "Definition der Fakultät: $(n+2)!=(n+2)\cdot(n+1)!$. Das ist die rechte Seite für $n+1$.", vv),
+          L("=", T`(n+2)! - 1`, "Definition der Fakultät: $(n+2)!=(n+2)\\cdot(n+1)!$. Das ist die rechte Seite für $n+1$.", vv),
         ],
       },
       anfang: [
@@ -312,7 +314,7 @@ function sumK2k() {
           L("=", T`(n-1)\cdot 2^{n} + 1 + (n+1)\cdot 2^{n}`, "Induktionsannahme einsetzen, $(n+1)-1=n$.", vv),
           L("=", T`\bigl((n-1)+(n+1)\bigr)\cdot 2^{n} + 1`, "$2^{n}$ ausklammern.", vv),
           L("=", T`2n\cdot 2^{n} + 1`, "Zusammenfassen: $(n-1)+(n+1)=2n$.", vv),
-          L("=", T`n\cdot 2^{n+1} + 1`, "$2\cdot 2^{n}=2^{n+1}$. Das ist die rechte Seite für $n+1$.", vv),
+          L("=", T`n\cdot 2^{n+1} + 1`, "$2\\cdot 2^{n}=2^{n+1}$. Das ist die rechte Seite für $n+1$.", vv),
         ],
       },
       anfang: [
@@ -363,7 +365,7 @@ function ineqQuad(r) {
     hints: hints(n0, An1, T`Binomische Formel: $(n+1)^2=n^2+2n+1$. Dann die Induktionsannahme für $n^2$ einsetzen und den Rest $2n+1-${a}$ abschätzen.`),
     blocks: blocks({
       n0, dom, An, An1,
-      anfang: ineqAnfang({ n0, find, rel, lt: (m) => `${m}^{2}`, rt: (m) => polyTex([b, a], String(m)).replace(/(\d)(\d)(?!.*\d)/, "$1$2"), lv: (m) => new Fr(m * m), rv: (m) => new Fr(a * m + b) }),
+      anfang: ineqAnfang({ n0, find, rel, lt: (m) => `${m}^{2}`, rt: (m) => `${a}\\cdot ${m}+${b}`, lv: (m) => new Fr(m * m), rv: (m) => new Fr(a * m + b) }),
       chain: {
         start: "(n+1)^{2}", v0: v((n) => (n + 1) ** 2),
         lines: [
@@ -419,7 +421,7 @@ function ineqExpQuad(r) {
   const vv = v((n) => 2 ** (n + 1));
   return {
     n0, claim: An, holds: ok,
-    hints: hints(n0, An1, T`$2^{n+1}=2\cdot 2^n$. Nach der Induktionsannahme bleibt $2${am}n^2$. Zerlege das in ${am}n^2+${am}n^2$ und schätze eine Hälfte mit $n^2\ge 2n+1$ ab.`),
+    hints: hints(n0, An1, T`$2^{n+1}=2\cdot 2^n$. Nach der Induktionsannahme bleibt $${a === 1 ? "2n^2" : T`2\cdot ${a}n^2`}$. Zerlege das in $${am}n^2+${am}n^2$ und schätze eine Hälfte mit $n^2\ge 2n+1$ ab.`),
     blocks: blocks({
       n0, dom, An, An1,
       anfang: ineqAnfang({ n0, find: false, rel: ">", lt: (m) => `2^{${m}}`, rt: (m) => `${am}\\cdot ${m}^{2}`, lv: (m) => new Fr(2n ** BigInt(m)), rv: (m) => new Fr(a * m * m) }),
@@ -734,7 +736,7 @@ function prodPow(r) {
       anfang: [
         { t: "text", s: "Startwert $n_0=1$." },
         { t: "eq", tex: T`\prod_{k=1}^{1} ${B}^{k} = ${B}^{1} = ${B}` },
-        { t: "eq", tex: T`${c}^{${E(0).replace(/n/g, "1")}} = ${c}^{${e}} = ${B}` },
+        { t: "eq", tex: T`${c}^{\frac{${e}\cdot 1\cdot (1+1)}{2}} = ${c}^{${e}} = ${B}` },
         { t: "text", s: "Beide Seiten sind gleich, der Induktionsanfang gilt." },
       ],
     }),
@@ -747,7 +749,8 @@ function prodFrac(r) {
     const c = pick;
     const Rn = (sh) => { const fs = Array.from({ length: c }, (_, j) => `(n+${j + 1 + sh})`); return c === 1 ? `n+${1 + sh}` : T`\frac{${fs.join("")}}{${[1, 2, 6][c - 1]}}`; };
     const Rv = (n) => { let x = new Fr(1); for (let j = 1; j <= c; j++) x = x.mul(n + j); return x.div([1, 2, 6][c - 1]); };
-    const f = (k) => T`\left(1+\frac{${c === 1 ? "" : c}}{${k}}\right)`;
+    const f = (k) => T`\left(1+\frac{${c}}{${k}}\right)`;
+    const Rp = (sh) => (c === 1 ? `(${Rn(sh)})` : Rn(sh));
     const An = T`\prod_{k=1}^{n} ${f("k")} = ${Rn(0)}`, An1 = T`\prod_{k=1}^{n+1} ${f("k")} = ${Rn(1)}`;
     const vv = (n) => Rv(n + 1);
     const n0 = 1;
@@ -760,15 +763,15 @@ function prodFrac(r) {
         chain: {
           start: T`\prod_{k=1}^{n+1} ${f("k")}`, v0: (n) => prod(1, n + 1, (k) => new Fr(k + c, k)),
           lines: [
-            L("=", T`\left(\prod_{k=1}^{n} ${f("k")}\right)\cdot ${f("(n+1)")}`, "Letzten Faktor abspalten.", vv),
-            L("=", T`${Rn(0)}\cdot ${f("(n+1)")}`, "Induktionsannahme einsetzen.", vv),
-            L("=", T`${Rn(0)}\cdot \frac{n+${c + 1}}{n+1}`, `Auf einen Bruch bringen: $1+\\frac{${c}}{n+1}=\\frac{n+1+${c}}{n+1}$.`, vv),
-            L("=", Rn(1), `Der Faktor $(n+1)$ steht im Zähler von $${Rn(0)}$ und kürzt sich. Übrig bleibt der neue Faktor $(n+${c + 1})$. Das ist die rechte Seite für $n+1$.`, vv),
+            L("=", T`\left(\prod_{k=1}^{n} ${f("k")}\right)\cdot ${f("n+1")}`, "Letzten Faktor abspalten.", vv),
+            L("=", T`${Rp(0)}\cdot ${f("n+1")}`, "Induktionsannahme einsetzen.", vv),
+            L("=", T`${Rp(0)}\cdot \frac{n+${c + 1}}{n+1}`, `Auf einen Bruch bringen: $1+\\frac{${c}}{n+1}=\\frac{n+1+${c}}{n+1}$.`, vv),
+            L("=", Rn(1), c === 1 ? "Der Faktor $(n+1)$ kürzt sich, übrig bleibt $n+2$. Das ist die rechte Seite für $n+1$." : `Der Faktor $(n+1)$ steht im Zähler von $${Rn(0)}$ und kürzt sich. Übrig bleibt der neue Faktor $(n+${c + 1})$. Das ist die rechte Seite für $n+1$.`, vv),
           ],
         },
         anfang: [
           { t: "text", s: "Startwert $n_0=1$." },
-          { t: "eq", tex: T`\prod_{k=1}^{1} ${f("k")} = 1+${c} = ${1 + c}` },
+          { t: "eq", tex: T`\prod_{k=1}^{1} ${f("k")} = 1+\frac{${c}}{1} = ${1 + c}` },
           { t: "eq", tex: T`${c === 1 ? "1+1" : at1} = ${1 + c}` },
           { t: "text", s: "Beide Seiten sind gleich, der Induktionsanfang gilt." },
         ],
@@ -866,7 +869,7 @@ function prodTele(r) {
 
 // ---------- Stärkere Aussage ("Manchmal klappt es nicht") ----------
 function strongGeo(r) {
-  const c = r.int(2, 5), n0 = 1;
+  const c = r.int(3, 6), n0 = 1;
   const q = c - 1;
   const Cc = new Fr(c);
   const S = (n) => sum(1, n, (k) => new Fr(1).div(Cc.pow(k)));
@@ -1024,8 +1027,8 @@ export function makeTask(id) {
   const g = REG.find((x) => x.key === key);
   if (!g) throw new Error("Unbekannte Aufgabe");
   const t = g.fn(rng(id));
-  t.dom ??= t.n0 === 1 ? T`n\in${NN}` : T`n\ge ${t.n0}`;
-  t.lead ??= `Beweise durch vollständige Induktion: Für alle $n\\in${NN}$ gilt`;
+  t.dom ??= t.blocks.dom ?? (t.n0 === 1 ? T`n\in${NN}` : T`n\ge ${t.n0}`);
+  t.lead ??= `Beweise durch vollständige Induktion: Für alle $${t.dom}$ gilt`;
   return { ...t, id, seed, key, cat: g.cat, lvl: g.lvl, title: g.title };
 }
 
