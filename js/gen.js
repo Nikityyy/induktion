@@ -18,7 +18,7 @@ function blocks({ n0, dom, anfang, An, An1, chain, afterStep = [], annahme }) {
   return [
     { h: "Induktionsanfang", items: anfang },
     { h: "Induktionsannahme", items: [{ t: "text", s: annahme ?? T`Die Aussage gelte für ein festes (aber beliebiges) $n\ge ${n0}$:` }, { t: "eq", tex: An }] },
-    { h: "Induktionsschritt", items: [{ t: "text", s: "Für dieses $n$ ist zu zeigen:" }, { t: "eq", tex: An1 }, { t: "chain", ...chain }, ...afterStep] },
+    { h: "Induktionsschritt", items: [{ t: "text", s: "Für dieses $n$ ist zu zeigen (Ziel):" }, { t: "eq", tex: An1 }, { t: "text", s: "Rechnung:" }, { t: "chain", ...chain }, ...afterStep] },
     { h: "Schluss", items: [{ t: "text", s: `Nach dem Prinzip der vollständigen Induktion gilt die Behauptung für alle $${dom}$.` }] },
   ];
 }
@@ -77,7 +77,7 @@ function polySum({ f, F, ftex }) {
     start: sumTex("n+1"),
     v0: (n) => sum(1, n + 1, (k) => peval(fP, k)),
     lines: [
-      L("=", T`\left(${sumTex("n")}\right) + ${ftex("(n+1)")}`, "Letzten Summanden abspalten: $k$ stur durch $(n+1)$ ersetzen.", vTot),
+      L("=", T`${sumTex("n")} + ${ftex("(n+1)")}`, "Letzten Summanden abspalten: $k$ stur durch $(n+1)$ ersetzen.", vTot),
       L("=", T`${closed(0)} + ${ftex("(n+1)")}`, "Induktionsannahme für die Summe bis $n$ einsetzen.", vTot),
       L("=", Pf.tex, "Auf den Hauptnenner bringen, ausmultiplizieren, zusammenfassen. Noch nicht raten, wohin es geht, erst ausrechnen.", vTot),
       L("=", closed(1), `Wo wollen wir hin? Zu ${"$"}${closed(1)}${"$"}. Probe: Zähler ausmultiplizieren: $${numTex(1)} = ${polyTex(probeInts)}$. Das passt.`, vTot),
