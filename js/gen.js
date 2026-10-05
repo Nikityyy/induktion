@@ -24,7 +24,7 @@ function blocks({ n0, dom, anfang, An, An1, chain, afterStep = [], annahme }) {
 }
 const hints = (n0, An1, strategy) => [
   { s: `Startwert: Für welches kleinste $n$ soll die Aussage gelten? Setze es im Induktionsanfang ein und prüfe beide Seiten getrennt.` },
-  { s: "Schreibe $A(n+1)$ sauber auf: ersetze überall $n$ stur durch $(n+1)$ und setze Klammern.", eq: An1 },
+  { s: "Schreibe die Aussage für $n+1$ sauber auf: ersetze überall $n$ stur durch $(n+1)$ und setze Klammern.", eq: An1 },
   { s: strategy },
 ];
 
@@ -110,7 +110,7 @@ const sumPoly = (r) => {
     () => polySum({ f: [0, 0, 0, 1], ftex: (v) => `${v}^{3}`, F: { coef: new Fr(1, 4), factors: [[1, 0], [1, 0], [1, 1], [1, 1]] } }),
     () => polySum({ f: [1, -4, 4], ftex: (v) => T`(${cdot(2, v)}-1)^{2}`, F: { coef: new Fr(1, 3), factors: [[1, 0], [2, -1], [2, 1]] } }),
     () => polySum({ f: [0, 1, 1], ftex: (v) => T`${v}(${v}+1)`, F: { coef: new Fr(1, 3), factors: [[1, 0], [1, 1], [1, 2]] } }),
-    () => polySum({ f: [0, 0.5, 0.5].map((x) => new Fr(x * 2, 2)), ftex: (v) => T`\frac{${v}(${v}+1)}{2}`, F: { coef: new Fr(1, 6), factors: [[1, 0], [1, 1], [1, 2]] } }),
+    () => polySum({ f: [new Fr(0), new Fr(1, 2), new Fr(1, 2)], ftex: (v) => T`\frac{${v}(${v}+1)}{2}`, F: { coef: new Fr(1, 6), factors: [[1, 0], [1, 1], [1, 2]] } }),
     () => polySum({ f: [0, c, 1], ftex: (v) => T`${v}(${v}+${c})`, F: { coef: new Fr(1, 6), factors: [[1, 0], [1, 1], [2, 1 + 3 * c]] } }),
   ])();
 };
@@ -334,11 +334,9 @@ const firstGood = (holds) => { let last = 0; for (let n = 1; n <= 80; n++) if (!
 
 function ineqAnfang({ n0, find, rel, lt, rt, lv, rv }) {
   const R = RELS[rel];
-  const row = (m) => ({ t: "eq", tex: T`${lt(m)} = ${lv(m)} \;${R.ok(lv(m).cmp(rv(m))) ? R.sym : R.no}\; ${rt(m)} = ${rv(m)}` });
   const num = (f) => (m) => f(m).toString();
   const wrap = (m) => ({ lt: lt(m), lv: num(lv)(m), rt: rt(m), rv: num(rv)(m), ok: R.ok(lv(m).cmp(rv(m))) });
   const show = (m) => { const w = wrap(m); return { t: "eq", tex: T`${w.lt} = ${w.lv} \;${w.ok ? R.sym : R.no}\; ${w.rt} = ${w.rv}` }; };
-  void row;
   const items = [];
   if (find) {
     items.push({ t: "text", s: `Wertetabelle: wir probieren von klein nach groß, bis die Aussage stimmt (und danach stimmen bleibt, das zeigt der Induktionsschritt).` });
@@ -459,7 +457,7 @@ function ineqFact(r) {
           L("=", T`(n+1)\cdot n!`, "Definition der Fakultät.", vv),
           L(">", T`(n+1)\cdot ${c}^{n}`, "Induktionsannahme $n!>" + c + "^n$, mit $n+1>0$ multipliziert.", (n) => fr(n + 1).mul(new Fr(c).pow(n))),
           L(T`\ge`, T`${c}\cdot ${c}^{n}`, `Wegen $n\\ge ${n0}$ ist $n+1\\ge ${n0 + 1}\\ge ${c}$.`, (n) => fr(c).mul(new Fr(c).pow(n))),
-          L("=", `${c}^{n+1}`, "Potenzgesetz. Gelesen von links nach rechts: $(n+1)!>" + c + "^{n+1}$, das ist $A(n+1)$.", (n) => new Fr(c).pow(n + 1)),
+          L("=", `${c}^{n+1}`, "Potenzgesetz. Gelesen von links nach rechts: $(n+1)!>" + c + "^{n+1}$, also die Aussage für n+1.", (n) => new Fr(c).pow(n + 1)),
         ],
       },
     }),
@@ -544,7 +542,6 @@ function ineqBern(r) {
 }
 
 // ---------- Teilbarkeit ----------
-const divDefs = (d) => ({ t: "text", s: `Teilbar heißt: $X = ${d}\\cdot m$ mit einer ganzen Zahl $m\\in\\mathbb{Z}$.` });
 
 function divPow(r) {
   const d = r.int(2, 9), b = r.chance(0.35) ? 1 : r.int(1, 9), a = b + d;
@@ -872,7 +869,7 @@ function strongGeo(r) {
   const c = r.int(2, 5), n0 = 1;
   const q = c - 1;
   const Cc = new Fr(c);
-  const S = (n) => sum(1, n, (k) => Cc.pow(k).pow(1).mul(0).add(new Fr(1).div(Cc.pow(k))));
+  const S = (n) => sum(1, n, (k) => new Fr(1).div(Cc.pow(k)));
   const Bn = (n) => new Fr(1).sub(new Fr(1).div(Cc.pow(n))).div(q);
   const lhs = (hi) => T`\sum_{k=1}^{${hi}} \frac{1}{${c}^{k}}`;
   const G = (e) => T`\frac{1}{${q}}\left(1-\frac{1}{${c}^{${e}}}\right)`;
@@ -988,11 +985,11 @@ export const CATS = {
 };
 // Themen wie in der PDF (Kapitel 2 bis 6)
 export const CAT_INFO = {
-  summen: { name: "Formeln mit Summen", tip: "Eine Summenformel beweisen. Trick: den letzten Summanden abspalten." },
-  ungl: { name: "Ungleichungen", tip: "Eine Ungleichung ab einem Startwert beweisen. Trick: Annahme einsetzen, Rest abschätzen." },
-  teil: { name: "Teilbarkeit", tip: "Zeigen, dass ein Term durch eine Zahl teilbar ist. Trick: Annahme als $d\cdot m$ schreiben." },
-  prod: { name: "Formeln mit Produkten", tip: "Eine Produktformel beweisen. Trick: den letzten Faktor abspalten, dann kürzen." },
-  stark: { name: "Manchmal klappt es nicht", tip: "Die Aussage ist zu schwach für Induktion. Trick: eine stärkere Aussage beweisen und folgern." },
+  summen: { name: "Formeln mit Summen", short: "Letzten Summanden abspalten", tip: "Eine Summenformel beweisen. Trick: den letzten Summanden abspalten." },
+  ungl: { name: "Ungleichungen", short: "Annahme einsetzen, Rest abschätzen", tip: "Eine Ungleichung ab einem Startwert beweisen. Trick: Annahme einsetzen, Rest abschätzen." },
+  teil: { name: "Teilbarkeit", short: "Als Vielfaches von d schreiben", tip: "Zeigen, dass ein Term durch eine Zahl teilbar ist. Trick: Annahme als Vielfaches von d schreiben." },
+  prod: { name: "Formeln mit Produkten", short: "Letzten Faktor abspalten, kürzen", tip: "Eine Produktformel beweisen. Trick: den letzten Faktor abspalten, dann kürzen." },
+  stark: { name: "Manchmal klappt es nicht", short: "Stärkere Aussage beweisen", tip: "Die Aussage ist zu schwach für Induktion. Trick: eine stärkere Aussage beweisen und folgern." },
 };
 const REG = [
   { key: "sum-arith", cat: "summen", lvl: 1, title: "Summenformel", fn: sumArith },
