@@ -185,11 +185,17 @@ function collapse(step) {
   h.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } };
 }
 
-function reveal() {
+let busy = false;
+async function reveal() {
+  if (busy) return;
+  busy = true;
   const i = st.revealed, b = cur.blocks[i], n = cur.blocks.length, sol = $("#sol");
   $("#tip").hidden = true;
   const prev = $(".sol-step:last-of-type", sol);
-  if (prev) collapse(prev);
+  if (prev) {
+    collapse(prev);
+    if (!calm.matches) await new Promise((r) => setTimeout(r, 400)); // erst zuklappen, dann den nächsten Schritt aufdecken: nie beides gleichzeitig
+  }
   const el = document.createElement("section");
   el.className = "sol-step focus";
   el.innerHTML = `<span class="no" aria-hidden="true">${i + 1}</span><div class="sb"><h2><span>${b.h}</span><small>${i + 1} von ${n}</small></h2><div class="bd"><div class="bd-in">${wrapItems(b.items)}</div></div></div>`;
@@ -207,22 +213,10 @@ function reveal() {
     $$("[data-r]").forEach((r) => (r.onclick = () => rate(r.dataset.r)));
     setCta("Nächste Aufgabe");
   } else setCta(`Weiter: ${cur.blocks[st.revealed].h}`);
-  scrollToEnd();
-}
-
-// ganz nach unten gleiten; das Ziel wird jede Bildlauf-Runde neu berechnet, weil das alte Fach gleichzeitig einklappt
-function scrollToEnd() {
-  if (calm.matches) return scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" });
-  const t0 = performance.now(); let stop = false;
-  const halt = () => (stop = true);
-  addEventListener("touchstart", halt, { once: true, passive: true });
-  const tick = () => {
-    const target = document.documentElement.scrollHeight - innerHeight, d = target - scrollY;
-    if (stop || (Math.abs(d) < 1 && performance.now() - t0 > 450) || performance.now() - t0 > 1500) return removeEventListener("touchstart", halt);
-    scrollTo({ top: scrollY + (Math.abs(d) < 1 ? d : d * 0.2), behavior: "instant" });
-    requestAnimationFrame(tick);
-  };
-  tick();
+  // so weit hinunter, dass der Anfang des neuen Schritts oben steht (soweit die Seite reicht)
+  const top = el.getBoundingClientRect().top + scrollY - 92;
+  scrollTo({ top: Math.min(top, document.documentElement.scrollHeight - innerHeight), behavior: calm.matches ? "instant" : "smooth" });
+  busy = false;
 }
 
 function rate(r) {
