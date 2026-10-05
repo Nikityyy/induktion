@@ -55,7 +55,7 @@ svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-widt
 
 .gb { position: fixed; left: 0; right: 0; z-index: 30; pointer-events: none; isolation: isolate; }
 .gb > div { position: absolute; inset: 0; }
-.gb-top { top: 0; } .gb-bottom { bottom: 0; }
+.gb-top { top: 0; background: linear-gradient(to bottom, var(--ground) 0%, color-mix(in srgb, var(--ground) 94%, transparent) 40%, color-mix(in srgb, var(--ground) 62%, transparent) 62%, color-mix(in srgb, var(--ground) 22%, transparent) 82%, transparent 100%); } .gb-bottom { bottom: 0; }
 
 /* ---------- Kopfzeile ---------- */
 .topbar { position: fixed; z-index: 40; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: calc(var(--col) + 2 * var(--m)); height: calc(var(--sat) + 66px); padding: calc(var(--sat) + 8px) var(--m) 0; display: flex; align-items: center; justify-content: space-between; transition: opacity 0.25s; }
@@ -159,6 +159,7 @@ h1 em { font-style: italic; }
 @keyframes sh-up { from { transform: translateY(105%); } }
 @keyframes sh-down { to { transform: translateY(105%); } }
 .sheet-box { max-width: var(--col); width: calc(100% - 16px); margin: 0 8px calc(var(--sab) + 8px); border-radius: 32px; padding: 10px var(--m) 14px; background: color-mix(in srgb, var(--raised) 88%, transparent); -webkit-backdrop-filter: blur(28px) saturate(1.4); backdrop-filter: blur(28px) saturate(1.4); box-shadow: 0 -10px 40px rgba(13, 16, 21, 0.25); color: var(--ink); max-height: 86dvh; }
+.sheet-box:focus { outline: none; }
 .grab { width: 36px; height: 5px; border-radius: 3px; background: var(--rule); margin: 0 auto 14px; }
 .sheet-box h2 { margin: 0 0 14px; font: 400 2rem/1 var(--serif); letter-spacing: -0.015em; }
 .seg3 { display: flex; background: color-mix(in srgb, var(--ground) 80%, transparent); border-radius: 12px; padding: 3px; margin-bottom: 8px; }

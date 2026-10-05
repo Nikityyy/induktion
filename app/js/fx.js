@@ -11,25 +11,12 @@ export function blurText(el) {
   el.innerHTML = [...el.childNodes].map((n) => (n.nodeType === 3 ? words(n.nodeValue) : `<${n.tagName.toLowerCase()}>${words(n.textContent)}</${n.tagName.toLowerCase()}>`)).join("");
 }
 
-// Mehrere Lagen backdrop-filter mit steigender Stärke, jede mit eigener Maske: weicher Unschärfe-Verlauf.
-export function gradualBlur(position, { height = "7rem", strength = 2, layers = 6 } = {}) {
+// Weicher Verlauf in der Hintergrundfarbe am oberen Rand: Inhalt läuft darunter sanft aus (Safari kann Masken auf backdrop-filter nicht verlässlich).
+export function gradualBlur(position, { height = "4rem" } = {}) {
   const host = document.createElement("div");
   host.className = `gb gb-${position}`;
   host.setAttribute("aria-hidden", "true");
   host.style.height = height;
-  const dir = position === "top" ? "to top" : "to bottom";
-  const inc = 100 / layers;
-  for (let i = 1; i <= layers; i++) {
-    const blur = Math.pow(2, (i / layers) * 4) * 0.0625 * strength;
-    const p = (k) => Math.round(inc * k * 10) / 10;
-    const stops = [`transparent ${p(i - 1)}%`, `black ${p(i)}%`];
-    if (p(i + 1) <= 100) stops.push(`black ${p(i + 1)}%`);
-    if (p(i + 2) <= 100) stops.push(`transparent ${p(i + 2)}%`);
-    const layer = document.createElement("div");
-    const mask = `linear-gradient(${dir}, ${stops.join(", ")})`;
-    layer.style.cssText = `mask-image:${mask};-webkit-mask-image:${mask};backdrop-filter:blur(${blur.toFixed(3)}rem);-webkit-backdrop-filter:blur(${blur.toFixed(3)}rem)`;
-    host.append(layer);
-  }
   document.body.append(host);
   return host;
 }
@@ -40,13 +27,16 @@ export const setHaptics = (on) => { enabled = on; };
 export async function initHaptics() {
   try {
     const m = await import("https://cdn.jsdelivr.net/npm/web-haptics@0.0.6/+esm");
-    wh = new m.WebHaptics();
+    wh = new m.WebHaptics({ debug: /[?&]haptics-debug/.test(location.search) }); // ?haptics-debug: Klickgeräusch am Desktop zum Testen
   } catch { /* offline oder blockiert: Fallback auf navigator.vibrate */ }
 }
 const FALLBACK = { tap: 8, success: [20, 40, 20], nudge: 15, error: [30, 40, 30, 40, 30] };
 // tap | success | nudge | error
+let lastAt = 0;
+export const hapticAge = (ms) => performance.now() - lastAt < ms; // gerade erst eine gezielte Haptik gespielt?
 export function haptic(kind = "tap") {
   if (!enabled) return;
+  if (kind !== "tap") lastAt = performance.now();
   try {
     if (wh) kind === "tap" ? wh.trigger(10, { intensity: 0.4 }) : wh.trigger(kind);
     else navigator.vibrate?.(FALLBACK[kind]);

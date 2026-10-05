@@ -1,6 +1,6 @@
 // © 2026 Nikita Berger
 import { makeTask, randomTask, CAT_INFO } from "./gen.js";
-import { blurText, gradualBlur, haptic, initHaptics, setHaptics } from "./fx.js";
+import { blurText, gradualBlur, haptic, hapticAge, initHaptics, setHaptics } from "./fx.js";
 
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
@@ -228,7 +228,7 @@ function openSheet() {
   const d = $("#sheet");
   const ck = '<svg class="i ck" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
   const opt = (k, name, tip) => `<button class="opt" data-cat="${k}" type="button"><span><b>${name}</b><small>${tip}</small></span>${S.prefs.cat === k ? ck : ""}</button>`;
-  d.innerHTML = `<div class="modal-box sheet-box"><div class="grab"></div><h2>Thema wählen</h2>
+  d.innerHTML = `<div class="modal-box sheet-box" tabindex="-1" autofocus><div class="grab"></div><h2>Thema wählen</h2>
     <div class="seg3" role="group" aria-label="Level">${[0, 1, 2, 3].map((l) => `<button data-lvl="${l}" type="button" class="${S.prefs.lvl === l ? "on" : ""}">${l ? `Level ${l}` : "Alle Level"}</button>`).join("")}</div>
     ${opt("", "Alle Themen", "Querbeet üben")}${Object.entries(CAT_INFO).map(([k, v]) => opt(k, v.name, v.short)).join("")}</div>
     <form method="dialog" class="modal-backdrop"><button aria-label="Schließen">schließen</button></form>`;
@@ -330,13 +330,14 @@ function viewLearn() {
 // ---------- Start ----------
 $$(".tabbar a").forEach((a) => a.addEventListener("click", (e) => { if (a.classList.contains("on")) { e.preventDefault(); scrollTo({ top: 0, behavior: "smooth" }); } }));
 document.addEventListener("change", (e) => { if (e.target.matches(".sw")) haptic("tap"); });
-document.addEventListener("pointerdown", (e) => { if (e.target.closest("button:not(:disabled), .tabbar a")) haptic("tap"); });
+// iOS löst Haptik nur innerhalb einer echten Berührung (click) aus, nicht bei pointerdown
+document.addEventListener("click", (e) => { if (e.target.closest("button:not(:disabled), .tabbar a") && !hapticAge(60)) haptic("tap"); });
 const calm = matchMedia("(prefers-reduced-motion: reduce)");
 addEventListener("hashchange", () => (document.startViewTransition && !calm.matches ? document.startViewTransition(route) : route()));
 addEventListener("resize", refit);
 document.fonts?.addEventListener?.("loadingdone", refit);
 document.fonts?.ready.then(refit);
-gradualBlur("top", { height: "calc(var(--sat) + 2.4rem)", strength: 0.9, layers: 1 });
+gradualBlur("top", { height: "calc(var(--sat) + 3rem)" });
 applyTheme();
 initHaptics();
 addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); installEv = e; });

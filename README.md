@@ -67,7 +67,7 @@ Alle Pfade sind relativ, die App läuft auch unter `https://<name>.github.io/<re
 - [daisyUI 5](https://daisyui.com/docs/cdn/) über CDN (Farben und Sheet-Dialog), Tailwind Browser-Build
 - [KaTeX](https://katex.org) für die Formeln
 - [web-haptics](https://www.jsdelivr.com/package/npm/web-haptics) für Vibrationsfeedback
-- BlurText und GradualBlur nach Vorbild von [React Bits](https://reactbits.dev), in reinem JS nachgebaut
+- BlurText und Blur-Text nach Vorbild von [React Bits](https://reactbits.dev), in reinem JS nachgebaut
 - Eigener Code: `app/js/core.js` (Brüche, Polynome), `app/js/gen.js` (Generatoren), `app/js/app.js` (Oberfläche), `app/js/fx.js` (Effekte, Haptik)
 
 ## Lizenz
