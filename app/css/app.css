@@ -189,7 +189,7 @@ h2.sec { margin: 40px 0 4px; font: 400 1.6471rem/1.1 var(--serif); letter-spacin
 .empty { margin: 14px 0 0; font-size: 1rem; color: var(--ink-2); }
 
 /* ---------- Titel-Unschärfe (BlurText) ---------- */
-.bt { display: inline-block; will-change: transform, filter, opacity; animation: bt 0.75s cubic-bezier(0.2, 0.7, 0.2, 1) both; animation-delay: calc(var(--i) * 70ms); }
+.bt { display: inline-block; padding: 0.14em 0.06em; margin: -0.14em -0.06em; will-change: transform, filter, opacity; animation: bt 0.75s cubic-bezier(0.2, 0.7, 0.2, 1) both; animation-delay: calc(var(--i) * 70ms); }
 @keyframes bt { 0% { filter: blur(10px); opacity: 0; transform: translateY(-14px); } 50% { filter: blur(5px); opacity: 0.5; transform: translateY(4px); } 100% { filter: blur(0); opacity: 1; transform: none; } }
 
 @media (prefers-reduced-motion: reduce) {
