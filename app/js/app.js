@@ -192,11 +192,10 @@ function reveal() {
   if (prev) collapse(prev);
   const el = document.createElement("section");
   el.className = "sol-step focus";
-  el.innerHTML = `<span class="no" aria-hidden="true">${i + 1}</span><div class="sb"><h2><span>${b.h}</span><small>${i + 1} von ${n}</small></h2>${wrapItems(b.items)}</div>`;
+  el.innerHTML = `<span class="no" aria-hidden="true">${i + 1}</span><div class="sb"><h2><span>${b.h}</span><small>${i + 1} von ${n}</small></h2><div class="bd"><div class="bd-in">${wrapItems(b.items)}</div></div></div>`;
   sol.append(el);
   fit(el);
   $$("#segs i")[i]?.classList.add("on");
-  el.scrollIntoView({ behavior: "smooth", block: "start" });
   st.revealed++;
   const last = st.revealed === n;
   haptic(last ? "success" : "nudge");
@@ -208,6 +207,22 @@ function reveal() {
     $$("[data-r]").forEach((r) => (r.onclick = () => rate(r.dataset.r)));
     setCta("Nächste Aufgabe");
   } else setCta(`Weiter: ${cur.blocks[st.revealed].h}`);
+  scrollToEnd();
+}
+
+// ganz nach unten gleiten; das Ziel wird jede Bildlauf-Runde neu berechnet, weil das alte Fach gleichzeitig einklappt
+function scrollToEnd() {
+  if (calm.matches) return scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" });
+  const t0 = performance.now(); let stop = false;
+  const halt = () => (stop = true);
+  addEventListener("touchstart", halt, { once: true, passive: true });
+  const tick = () => {
+    const target = document.documentElement.scrollHeight - innerHeight, d = target - scrollY;
+    if (stop || (Math.abs(d) < 1 && performance.now() - t0 > 450) || performance.now() - t0 > 1500) return removeEventListener("touchstart", halt);
+    scrollTo({ top: scrollY + (Math.abs(d) < 1 ? d : d * 0.2), behavior: "instant" });
+    requestAnimationFrame(tick);
+  };
+  tick();
 }
 
 function rate(r) {

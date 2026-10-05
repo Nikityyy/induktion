@@ -120,11 +120,16 @@ h1 em { font-style: italic; }
 /* ---------- Lösungsweg ---------- */
 .sol { display: grid; grid-template-columns: minmax(0, 1fr); margin-top: 22px; }
 .sol:empty { display: none; }
-.sol-step { display: grid; grid-template-columns: 36px minmax(0, 1fr); padding: 20px 0 22px; border-top: var(--hair) solid var(--rule); scroll-margin-top: 92px; transition: opacity 0.3s; }
+.sol-step { display: grid; grid-template-columns: 36px minmax(0, 1fr); padding: 20px 0 22px; border-top: var(--hair) solid var(--rule); scroll-margin-top: 92px; transition: opacity 0.3s, padding 0.38s cubic-bezier(0.32, 0.72, 0, 1); }
 .sol-step:first-child { border-top: 0; }
 .sol-step.old { opacity: 0.74; } .sol-step.old h2 { cursor: pointer; }
 .sol-step h2[role="button"]:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
-.sol-step.collapsed { padding: 14px 0; } .sol-step.collapsed .sb > :not(h2) { display: none; } .sol-step.collapsed h2 { font-size: 1.2941rem; margin: 0; } .sol-step.collapsed .no { font-size: 1.2941rem; }
+.sol-step.collapsed { padding: 14px 0; } .sol-step.collapsed h2 { font-size: 1.2941rem; margin: 0; } .sol-step.collapsed .no { font-size: 1.2941rem; }
+.bd { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 0.38s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s; }
+.bd-in { min-height: 0; overflow: hidden; margin: -4px; padding: 4px; }
+.sol-step.collapsed .bd { grid-template-rows: 0fr; opacity: 0; }
+.sol-step.collapsed .bd-in { visibility: hidden; transition: visibility 0s 0.38s; }
+.sol-step .no, .sol-step h2 { transition: font-size 0.38s cubic-bezier(0.32, 0.72, 0, 1), margin 0.38s; }
 .sol-step .no { font: 400 1.6471rem/1.05 var(--serif); color: var(--accent-text); }
 .sol-step h2 { margin: 0 0 6px; font: 400 1.6471rem/1.05 var(--serif); letter-spacing: -0.01em; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
 .sol-step h2 small { font: 600 0.7647rem var(--ui); color: var(--ink-2); letter-spacing: 0; }
@@ -165,8 +170,10 @@ h1 em { font-style: italic; }
 .sheet-box h2 { margin: 0 0 14px; font: 400 2rem/1 var(--serif); letter-spacing: -0.015em; }
 .seg3 { display: flex; gap: 2px; background: color-mix(in srgb, var(--ground) 80%, transparent); border-radius: 12px; padding: 4px; margin-bottom: 8px; }
 .seg3 button { flex: 1; padding: 0 6px; white-space: nowrap; height: 34px; border-radius: 9px; font: 600 0.8824rem var(--ui); color: var(--ink-2); } .seg3 button.on { background: var(--raised); color: var(--ink); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12); }
-.opt { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 0; min-height: 60px; border-top: var(--hair) solid var(--rule); text-align: left; }
-.opt:first-of-type { border-top: 0; }
+.opt { position: relative; display: flex; align-items: center; gap: 12px; width: calc(100% + 24px); margin: 0 -12px; padding: 10px 12px; min-height: 60px; border-radius: 14px; text-align: left; transition: background 0.15s; }
+.opt::before { content: ""; position: absolute; top: 0; left: 12px; right: 12px; border-top: var(--hair) solid var(--rule); }
+.opt:first-of-type::before { display: none; }
+.opt:active { transform: none; }
 .opt b { display: block; font: 600 1rem/1.35 var(--ui); letter-spacing: -0.3px; } .opt small { display: block; font-size: 0.7647rem; line-height: 1.0588rem; color: var(--ink-2); }
 .opt .ck { margin-left: auto; color: var(--ink); }
 
