@@ -225,3 +225,4 @@ body[data-view="ueben"] .wm { transition: opacity 0.2s; opacity: calc(1 - var(--
 .topbar { view-transition-name: topbar; } .tabbar { view-transition-name: tabbar; } .cta-wrap { view-transition-name: cta; }
 ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 0.26s; animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1); }
 ::view-transition-group(topbar), ::view-transition-group(tabbar), ::view-transition-group(cta) { animation-duration: 0s; }
+::view-transition-group(tabbar), ::view-transition-image-pair(tabbar), ::view-transition-old(tabbar), ::view-transition-new(tabbar) { border-radius: 31px; overflow: clip; }
