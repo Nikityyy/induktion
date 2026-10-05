@@ -323,7 +323,7 @@ function viewLearn() {
     <p class="tip-p"><b>Ziel hinschreiben.</b> Steckst du fest, schau auf die Aussage für n+1. Dort siehst du den Faktor, den du ausklammern musst.</p>
     <p class="tip-p"><b>Nicht zu früh ausmultiplizieren.</b> Erst Hauptnenner bilden, dann gemeinsame Faktoren suchen.</p>
     <p class="tip-p"><b>Klappt es nicht?</b> Dann ist die Aussage vielleicht zu schwach. Beweise eine stärkere mit Gleichheit und folgere die schwächere.</p>
-    <p class="src">Aufbau angelehnt an das Skript „Beweise durch vollständige Induktion“ von Luise Unger (FernUniversität in Hagen). Alle Aufgaben erzeugt die App selbst. © 2026 Nikita Berger</p>`, "Lernen");
+    <p class="src">Aufbau angelehnt an das Skript „Beweise durch vollständige Induktion“ von Luise Unger (FernUniversität in Hagen). Alle Aufgaben erzeugt die App selbst. © 2026 Nikita Berger</p>`, "Wie Induktion funktioniert");
   mathify(view);
   fit(view);
 }
