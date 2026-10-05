@@ -42,13 +42,15 @@ html { scroll-behavior: smooth; overscroll-behavior-y: contain; background: var(
 body {
   margin: 0; min-height: 100dvh; background: var(--ground); color: var(--ink); font: 400 1rem/1.35 var(--ui);
   overflow-x: hidden; touch-action: manipulation; -webkit-font-smoothing: antialiased;
-  padding: calc(var(--sat) + 74px) 0 calc(var(--sab) + 190px);
+  padding: calc(var(--sat) + 62px) 0 calc(var(--sab) + 150px);
 }
 main { max-width: calc(var(--col) + 2 * var(--m)); margin: 0 auto; padding: 0 var(--m); outline: none; }
 button, a, .tabbar { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; padding: 0; }
 button:active:not(:disabled) { transform: scale(0.97); }
 :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 6px; }
+main:focus-visible { outline: none; }
+body:not([data-view="ueben"]) { padding-top: calc(var(--sat) + 28px); }
 svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: none; }
 
 .gb { position: fixed; left: 0; right: 0; z-index: 30; pointer-events: none; isolation: isolate; }
@@ -79,7 +81,7 @@ body:not([data-view="ueben"]) #topicBtn { visibility: hidden; }
 /* ---------- Titel ---------- */
 h1.page, .tt h1 { margin: 0; font: 400 2.7059rem/1.02 var(--serif); letter-spacing: -0.02em; text-wrap: balance; }
 h1 em { font-style: italic; }
-.tt { margin: 12px 0 clamp(22px, 7dvh, 64px); }
+.tt { margin: 4px 0 clamp(22px, 7dvh, 64px); }
 .tt.pg { margin-bottom: 22px; }
 
 /* ---------- Die Aufgabe ---------- */
@@ -166,18 +168,8 @@ h1 em { font-style: italic; }
 .example .ex { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 4px 10px; align-items: baseline; padding: 8px 0; border-top: var(--hair) solid var(--rule); }
 .example .ex:first-of-type { border-top: 0; }
 .example .ex b { font: 700 0.8824rem var(--ui); } .example .ex span { font-size: 0.8824rem; line-height: 1.2353rem; color: var(--ink-2); } .example .ex .eq { grid-column: 2; font-size: 1rem; margin: 0; }
-.chain-demo { display: grid; grid-template-columns: repeat(6, 1fr); align-items: end; height: 96px; margin-top: 24px; padding: 0 4px; }
-.dm { position: relative; width: 22px; height: 62px; border-radius: 5px; background: var(--ink); transform-origin: 0 100%; transition: transform 0.45s cubic-bezier(0.5, 0, 0.7, 1), background 0.3s; }
-.dm::after { content: ""; position: absolute; left: 4px; right: 4px; top: 50%; height: 1.5px; background: var(--ground); opacity: 0.55; }
-.dm.fell { transform: rotate(43deg); background: var(--accent); }
-.dm.gap { background: none; border: 1.5px dashed var(--ink-3); } .dm.gap::after { display: none; }
-.dm.wob { animation: wob 0.35s; } @keyframes wob { 30% { transform: rotate(-5deg); } 60% { transform: rotate(3deg); } }
-.chain-labels { display: grid; grid-template-columns: repeat(6, 1fr); padding: 6px 4px 0; font-size: 0.7059rem; color: var(--ink-2); font-variant-numeric: tabular-nums; }
-.opts-d { display: grid; margin-top: 18px; }
 .set { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 0; border-top: var(--hair) solid var(--rule); min-height: 56px; }
 .set .seg3 { margin: 0; width: 210px; } .set .seg3 button { font-size: 0.8235rem; }
-.demo-row { display: flex; align-items: center; gap: 16px; margin-top: 16px; }
-.demo-row .msg { margin: 0; font-size: 0.8824rem; color: var(--ink-2); }
 h2.sec { margin: 40px 0 4px; font: 400 1.6471rem/1.1 var(--serif); letter-spacing: -0.01em; }
 .part { display: grid; grid-template-columns: 32px 1fr; gap: 4px 8px; align-items: baseline; padding: 11px 0; border-top: var(--hair) solid var(--rule); }
 .part b { font: 400 1.6471rem/1 var(--serif); color: var(--accent-text); grid-row: span 2; }

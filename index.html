@@ -41,7 +41,6 @@ nav .btn{min-height:40px;padding:0 20px;font-size:.95rem}
 .top .btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:24px}
 .phones{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,3vw,36px);align-items:start;margin-top:56px}
 .phones>*:nth-child(2){margin-top:40px}
-.framed{border-radius:9% / 4.2%;box-shadow:0 0 0 6px var(--ink),0 24px 60px -20px rgba(21,23,28,.4)}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;padding:72px 0}
 .row.flip .shot{order:2}
 .row .shot{max-width:300px;margin:0 auto;width:100%}
@@ -85,15 +84,15 @@ dialog .btns{display:flex;gap:10px}dialog .btn{flex:1}
     <button class="btn ghost" id="how" type="button">Auf dem iPhone installieren</button>
   </div>
   <div class="phones">
-    <img class="framed" src="assets/screens/aufgabe.png" alt="Eine Aufgabe zur Summenformel" width="1179" height="2556">
-    <img class="framed" src="assets/screens/loesungsweg.png" alt="Der Lösungsweg, Schritt für Schritt" width="1179" height="2556">
-    <img class="framed" src="assets/screens/thema.png" alt="Thema auswählen" width="1179" height="2556">
+    <img src="assets/screens/aufgabe.png" alt="Eine Aufgabe zur Summenformel" width="1179" height="2556">
+    <img src="assets/screens/loesungsweg.png" alt="Der Lösungsweg, Schritt für Schritt" width="1179" height="2556">
+    <img src="assets/screens/thema.png" alt="Thema auswählen" width="1179" height="2556">
   </div>
 </header>
 
 <main class="wrap">
   <section class="row rv">
-    <img class="framed shot" src="assets/screens/aufgabe.png" alt="Aufgabe mit Formel" width="1179" height="2556" loading="lazy">
+    <img class="shot" src="assets/screens/aufgabe.png" alt="Aufgabe mit Formel" width="1179" height="2556" loading="lazy">
     <div>
       <h2>Jedes Mal <em>neu.</em></h2>
       <p class="lead">Nichts ist abgetippt. Jede Aufgabe wird erzeugt, mit eigenen Zahlen und der passenden Lösung.</p>
@@ -106,7 +105,7 @@ dialog .btns{display:flex;gap:10px}dialog .btn{flex:1}
   </section>
 
   <section class="row flip rv">
-    <img class="framed shot" src="assets/screens/loesungsweg.png" alt="Lösungsweg" width="1179" height="2556" loading="lazy">
+    <img class="shot" src="assets/screens/loesungsweg.png" alt="Lösungsweg" width="1179" height="2556" loading="lazy">
     <div>
       <h2>Schritt für <em>Schritt.</em></h2>
       <p class="lead">Löse selbst auf Papier. Dann tippst du weiter und siehst nur die nächste Zeile.</p>
@@ -119,7 +118,7 @@ dialog .btns{display:flex;gap:10px}dialog .btn{flex:1}
   </section>
 
   <section class="row rv">
-    <img class="framed shot" src="assets/screens/fortschritt.png" alt="Fortschritt" width="1179" height="2556" loading="lazy">
+    <img class="shot" src="assets/screens/fortschritt.png" alt="Fortschritt" width="1179" height="2556" loading="lazy">
     <div>
       <h2>Lernen und <em>merken.</em></h2>
       <p class="lead">Eine kurze Erklärung, wie Induktion funktioniert, und eine Übersicht, was schon sitzt.</p>

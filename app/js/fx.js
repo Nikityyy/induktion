@@ -17,7 +17,7 @@ export function gradualBlur(position, { height = "7rem", strength = 2, layers = 
   host.className = `gb gb-${position}`;
   host.setAttribute("aria-hidden", "true");
   host.style.height = height;
-  const dir = position === "top" ? "to bottom" : "to top";
+  const dir = position === "top" ? "to top" : "to bottom";
   const inc = 100 / layers;
   for (let i = 1; i <= layers; i++) {
     const blur = Math.pow(2, (i / layers) * 4) * 0.0625 * strength;

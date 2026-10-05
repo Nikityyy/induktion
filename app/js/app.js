@@ -303,15 +303,6 @@ function viewLearn() {
       <div class="ex"><b>A(2)</b><span>dieselbe Aussage für n = 2</span><div class="eq">${km("1+2=\\frac{2\\cdot 3}{2}", true)}</div></div>
       <div class="ex"><b>A(n+1)</b><span>dieselbe Aussage für die nächste Zahl</span><div class="eq">${km("1+2+\\dots+(n+1)=\\frac{(n+1)(n+2)}{2}", true)}</div></div>
     </div>
-    <h2 class="sec">Das Dominoprinzip</h2>
-    <p class="body-t">Jeder Stein ist die Aussage für eine Zahl. Fällt der erste, und jeder Stein reißt den nächsten mit, fallen alle. Probiere es aus:</p>
-    <div class="chain-demo" id="demo" aria-hidden="true">${Array.from({ length: 6 }, () => '<i class="dm"></i>').join("")}</div>
-    <div class="chain-labels" aria-hidden="true">${Array.from({ length: 6 }, (_, i) => `<span>n = ${i + 1}</span>`).join("")}</div>
-    <div class="opts-d">
-      <label class="set"><span>Der erste Stein fällt (Induktionsanfang)</span><input id="cA" type="checkbox" class="sw" checked /></label>
-      <label class="set"><span>Jeder Stein trifft den nächsten (Induktionsschritt)</span><input id="cS" type="checkbox" class="sw" checked /></label>
-    </div>
-    <div class="demo-row"><button class="btn-ink" id="push" type="button">Anstoßen</button><p class="msg" id="dmsg" role="status"></p></div>
     <h2 class="sec">Die vier Teile eines Beweises</h2>
     <div class="part"><b>1</b><span>Induktionsanfang</span><small>Setze die erste Zahl ein (meist n = 1) und rechne beide Seiten getrennt aus. Sie müssen gleich sein.</small></div>
     <div class="part"><b>2</b><span>Induktionsannahme</span><small>Nimm an, dass die Aussage für ein festes n stimmt. Das ist eine Annahme, noch kein Beweis.</small></div>
@@ -325,19 +316,6 @@ function viewLearn() {
     <p class="src">Aufbau angelehnt an das Skript „Beweise durch vollständige Induktion“ von Luise Unger (FernUniversität in Hagen). Alle Aufgaben erzeugt die App selbst. © 2026 Nikita Berger</p>`, "Lernen");
   mathify(view);
   fit(view);
-  const stones = $$("#demo .dm"), push = $("#push"), msg = $("#dmsg"), cA = $("#cA"), cS = $("#cS");
-  const reset = () => { msg.textContent = ""; stones.forEach((s, i) => { s.classList.remove("fell", "wob"); s.classList.toggle("gap", !cS.checked && i === 3); }); };
-  cA.onchange = cS.onchange = () => { reset(); haptic("tap"); }; reset();
-  push.onclick = async () => {
-    reset();
-    if (!cA.checked) { stones[0].classList.add("wob"); msg.textContent = "Ohne Anfang fällt kein Stein."; haptic("error"); return; }
-    push.disabled = true;
-    for (const s of stones) {
-      if (s.classList.contains("gap")) { msg.textContent = "Ohne Schritt reißt die Kette ab."; haptic("error"); push.disabled = false; return; }
-      s.classList.add("fell"); haptic("tap"); await wait(170);
-    }
-    msg.textContent = "Alle gefallen."; haptic("success"); push.disabled = false;
-  };
 }
 
 // ---------- Start ----------
