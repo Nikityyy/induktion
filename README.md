@@ -1,9 +1,6 @@
 # Induktion
 
-**Aufgaben zur vollständigen Induktion, jedes Mal neu erzeugt, mit Lösungsweg und Lösung.**
-Eine installierbare Web-App (PWA), komplett statisch, gebaut für GitHub Pages.
-
-© 2026 Nikita Berger
+![og](assets/og.png)
 
 ## Warum es das gibt
 
