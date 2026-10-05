@@ -12,8 +12,8 @@ Trotzdem muss ich sie können. Also wollte ich sie endlich lernen, und zwar an *
 Aufgaben**, nicht an den drei Beispielen aus dem Skript, die ich nach einer Woche auswendig kenne.
 
 Deshalb gibt es diese App: Ich öffne sie, bekomme eine **neue Aufgabe**, löse sie auf Papier und lasse
-mir danach den **Lösungsweg Schritt für Schritt** anzeigen: Induktionsanfang, Annahme, Schritt, Schluss.
-Nichts ist fest einprogrammiert, jede Aufgabe wird beim Öffnen frisch erzeugt.
+mir danach den **Lösungsweg Schritt für Schritt** zeigen: Induktionsanfang, Annahme, Schritt, Schluss.
+Nichts ist fest einprogrammiert, jede Aufgabe wird beim Öffnen frisch erzeugt. Eingetippt wird nichts.
 
 ## Was drin ist
 
@@ -27,11 +27,19 @@ Die Themen folgen der PDF „Beweise durch vollständige Induktion“ (Luise Ung
 | Formeln mit Produkten | Potenzprodukte, `∏(1 + c/k)`, Teleskopprodukte |
 | Manchmal klappt es nicht | stärkere Aussage beweisen, dann folgern |
 
-- 24 Aufgabentypen in 3 Leveln, Zufallszahlen jedes Mal anders (jede Aufgabe hat eine Kennung wie `#k3j9x`
-  und ist über den Link reproduzierbar).
-- Du gibst **nichts ein**. Aufgabe lesen, selbst lösen, Lösungsweg aufdecken. Tipps gibt es vorher.
-- Fortschritt, Serie und „Nochmal üben“-Liste bleiben lokal im Browser.
-- Offline nutzbar nach dem ersten Laden, mit haptischem Feedback auf dem Handy.
+- 24 Aufgabentypen in 3 Leveln. Das Thema und das Level wählst du oben rechts.
+- Tipps vorab, dann der Lösungsweg Schritt für Schritt. Während du ihn liest, bleibt die Aufgabe oben angeheftet.
+- Im Tab „Lernen“ ist das Prinzip erklärt (was A(n) bedeutet, die vier Teile, Dominoprinzip zum Ausprobieren).
+- Fortschritt und „Nochmal üben“-Liste bleiben lokal im Browser.
+- Hell, Nacht oder System. Offline nutzbar nach dem ersten Laden.
+
+## So fühlt es sich nativ an
+
+Systemschrift (auf dem iPhone SF Pro) und **Dynamic Type**, großer Titel, der in die Leiste einklappt,
+Glas nur in der Navigation, Sheet zum Wegwischen, Aktionsblatt statt Browser-Dialog, iOS-Schalter,
+sanfte Seitenwechsel, Haptik über [web-haptics](https://www.jsdelivr.com/package/npm/web-haptics),
+Tippen auf den aktiven Tab springt nach oben. Auf dem iPhone: in Safari **Teilen → Zum Home-Bildschirm**,
+dann läuft die App im Vollbild.
 
 ## Korrektheit
 
@@ -59,15 +67,11 @@ Alle Pfade sind relativ, die App läuft auch unter `https://<name>.github.io/<re
 
 ## Technik
 
-- [daisyUI 5](https://daisyui.com/docs/cdn/) über CDN, Tailwind Browser-Build
+- [daisyUI 5](https://daisyui.com/docs/cdn/) über CDN (Farben und Sheet-Dialog), Tailwind Browser-Build
 - [KaTeX](https://katex.org) für die Formeln
 - [web-haptics](https://www.jsdelivr.com/package/npm/web-haptics) für Vibrationsfeedback
 - BlurText und GradualBlur nach Vorbild von [React Bits](https://reactbits.dev), in reinem JS nachgebaut
-- Eigener Code: `js/core.js` (Brüche, Polynome), `js/gen.js` (Generatoren), `js/app.js` (Oberfläche)
-
-### Eigenes Hintergrundbild
-
-Eine Datei `assets/bg/bg.jpg` ablegen. Sie wird automatisch weichgezeichnet hinter die App gelegt.
+- Eigener Code: `js/core.js` (Brüche, Polynome), `js/gen.js` (Generatoren), `js/app.js` (Oberfläche), `js/fx.js` (Effekte, Haptik)
 
 ## Lizenz
 
