@@ -163,8 +163,8 @@ h1 em { font-style: italic; }
 .sheet-box:focus { outline: none; }
 .grab { width: 36px; height: 5px; border-radius: 3px; background: var(--rule); margin: 0 auto 14px; }
 .sheet-box h2 { margin: 0 0 14px; font: 400 2rem/1 var(--serif); letter-spacing: -0.015em; }
-.seg3 { display: flex; background: color-mix(in srgb, var(--ground) 80%, transparent); border-radius: 12px; padding: 3px; margin-bottom: 8px; }
-.seg3 button { flex: 1; height: 34px; border-radius: 9px; font: 600 0.8824rem var(--ui); color: var(--ink-2); } .seg3 button.on { background: var(--raised); color: var(--ink); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12); }
+.seg3 { display: flex; gap: 2px; background: color-mix(in srgb, var(--ground) 80%, transparent); border-radius: 12px; padding: 4px; margin-bottom: 8px; }
+.seg3 button { flex: 1; padding: 0 6px; white-space: nowrap; height: 34px; border-radius: 9px; font: 600 0.8824rem var(--ui); color: var(--ink-2); } .seg3 button.on { background: var(--raised); color: var(--ink); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12); }
 .opt { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 0; min-height: 60px; border-top: var(--hair) solid var(--rule); text-align: left; }
 .opt:first-of-type { border-top: 0; }
 .opt b { display: block; font: 600 1rem/1.35 var(--ui); letter-spacing: -0.3px; } .opt small { display: block; font-size: 0.7647rem; line-height: 1.0588rem; color: var(--ink-2); }
