@@ -13,7 +13,7 @@ Aufgaben**, nicht an den drei Beispielen aus dem Skript, die ich nach einer Woch
 
 Deshalb gibt es diese App: Ich öffne sie, bekomme eine **neue Aufgabe**, löse sie auf Papier und lasse
 mir danach den **Lösungsweg Schritt für Schritt** zeigen: Induktionsanfang, Annahme, Schritt, Schluss.
-Nichts ist fest einprogrammiert, jede Aufgabe wird beim Öffnen frisch erzeugt. Eingetippt wird nichts.
+Nichts ist fest einprogrammiert, jede Aufgabe wird beim Öffnen frisch erzeugt. Du musst nichts eingeben, nur antippen.
 
 ## Was drin ist
 
@@ -28,7 +28,7 @@ Die Themen folgen der PDF „Beweise durch vollständige Induktion“ (Luise Ung
 | Manchmal klappt es nicht | stärkere Aussage beweisen, dann folgern |
 
 - 24 Aufgabentypen in 3 Leveln. Das Thema und das Level wählst du oben rechts.
-- Tipps vorab, dann der Lösungsweg Schritt für Schritt. Während du ihn liest, bleibt die Aufgabe oben angeheftet.
+- Auf Wunsch Hinweise („Tipp anzeigen“, bis zu drei), dann der Lösungsweg Schritt für Schritt. Während du ihn liest, bleibt die Aufgabe oben angeheftet.
 - Im Tab „Lernen“ ist das Prinzip erklärt (was A(n) bedeutet, die vier Teile, Dominoprinzip zum Ausprobieren).
 - Fortschritt und „Nochmal üben“-Liste bleiben lokal im Browser.
 - Hell, Nacht oder System. Offline nutzbar nach dem ersten Laden.
@@ -37,8 +37,8 @@ Die Themen folgen der PDF „Beweise durch vollständige Induktion“ (Luise Ung
 
 Systemschrift (auf dem iPhone SF Pro) und **Dynamic Type**, großer Titel, der in die Leiste einklappt,
 Glas nur in der Navigation, Sheet zum Wegwischen, Aktionsblatt statt Browser-Dialog, iOS-Schalter,
-sanfte Seitenwechsel, Haptik über [web-haptics](https://www.jsdelivr.com/package/npm/web-haptics),
-Tippen auf den aktiven Tab springt nach oben. Auf dem iPhone: in Safari **Teilen → Zum Home-Bildschirm**,
+sanfte Seitenwechsel und Haptik über [web-haptics](https://www.jsdelivr.com/package/npm/web-haptics).
+Erneutes Antippen des aktiven Tabs springt nach oben. Auf dem iPhone: in Safari **Teilen → Zum Home-Bildschirm**,
 dann läuft die App im Vollbild.
 
 ## Korrektheit
