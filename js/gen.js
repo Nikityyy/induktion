@@ -67,7 +67,10 @@ function polySum({ f, F, ftex }) {
   const facVals = fac.map(([p, q]) => p + q);
   const rhs1 = T`${coef.den === 1 ? "" : "\\frac{"}${coef.num === 1 ? "" : coef.num + "\\cdot "}${facVals.join("\\cdot ")}${coef.den === 1 ? "" : `}{${coef.den}}`}`;
   const vTot = (n) => peval(Fp, n + 1);
-  const sumTex = (hi) => T`\sum_{k=1}^{${hi}} ${ftex("k")}`;
+  // Summand mit Plus/Minus auf oberster Ebene braucht Klammern: \sum (6k-2), nicht \sum 6k-2
+  const topSign = (x) => { let d = 0; for (let i = 1; i < x.length; i++) { const c = x[i]; if ("({[".includes(c)) d++; else if (")}]".includes(c)) d--; else if (!d && (c === "+" || c === "-")) return true; } return false; };
+  const body = topSign(ftex("k")) ? `(${ftex("k")})` : ftex("k");
+  const sumTex = (hi) => T`\sum_{k=1}^{${hi}} ${body}`;
   const An = T`${sumTex("n")} = ${closed(0)}`;
   const An1 = T`${sumTex("n+1")} = ${closed(1)}`;
   const chain = {
