@@ -196,7 +196,7 @@ async function reveal() {
   const prev = $(".sol-step:last-of-type", sol);
   if (prev) {
     collapse(prev);
-    if (!calm.matches) await new Promise((r) => setTimeout(r, 400)); // erst zuklappen, dann den nächsten Schritt aufdecken: nie beides gleichzeitig
+    if (!calm.matches) await new Promise((r) => setTimeout(r, 340)); // erst zuklappen, dann den nächsten Schritt aufdecken: nie beides gleichzeitig
   }
   const el = document.createElement("section");
   el.className = "sol-step focus";
@@ -217,7 +217,7 @@ async function reveal() {
   } else setCta(`Weiter: ${cur.blocks[st.revealed].h}`);
   // so weit hinunter, dass der Anfang des neuen Schritts oben steht (soweit die Seite reicht)
   const top = el.getBoundingClientRect().top + scrollY - 92;
-  scrollTo({ top: Math.min(top, document.documentElement.scrollHeight - innerHeight), behavior: calm.matches ? "instant" : "smooth" });
+  requestAnimationFrame(() => scrollTo({ top: Math.min(top, document.documentElement.scrollHeight - innerHeight), behavior: calm.matches ? "instant" : "smooth" }));
   busy = false;
 }
 
