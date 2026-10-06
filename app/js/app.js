@@ -36,7 +36,7 @@ function fit(root = document) {
     const d = $(".katex-display", box), k = d && $(".katex", d);
     if (!k) return;
     d.style.transform = ""; box.style.height = ""; box.classList.remove("scroll");
-    const have = k.clientWidth, need = k.scrollWidth;
+    const html = $(".katex-html", k), have = k.clientWidth, need = Math.max(k.scrollWidth, Math.ceil(html ? html.getBoundingClientRect().width : 0)); // Safari meldet scrollWidth teils zu klein: auch die echte Breite messen
     if (!need || !have || need <= have) return;
     const s = have / need, sc = Math.max(s, MIN_SCALE);
     d.style.transform = `scale(${sc})`;
@@ -120,6 +120,7 @@ const mount = (html) => {
   $$("[data-blur]", view).forEach((el) => blurText(el));
   fit(view);
   onScroll();
+  setTimeout(refit, 500); setTimeout(refit, 1500); // Schriften können nachladen und die Breite ändern
 };
 // großer Titel -> kleiner Titel in der Leiste (Fortschritt 0..1)
 function onScroll() {
@@ -354,7 +355,7 @@ function viewLearn() {
 // Berührung, die nur eine auslaufende Scroll-Bewegung stoppt, erzeugt in iOS keinen click: Tab trotzdem wechseln
 {
   let down = null;
-  const tabAt = (x, y) => $$(".tabbar a").find((a) => { const r = a.getBoundingClientRect(); return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom; });
+  const tabAt = (x, y) => $$(".tabbar button").find((a) => { const r = a.getBoundingClientRect(); return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom; });
   addEventListener("pointerdown", (e) => { down = { x: e.clientX, y: e.clientY, t: performance.now(), a: tabAt(e.clientX, e.clientY) }; }, true);
   addEventListener("pointerup", (e) => {
     const d = down; down = null;
@@ -362,10 +363,10 @@ function viewLearn() {
     setTimeout(() => { if (document.documentElement.dataset.view !== d.a.dataset.nav && !d.a.classList.contains("on")) d.a.click(); }, 80);
   }, true);
 }
-$$(".tabbar a").forEach((a) => a.addEventListener("click", (e) => { if (a.classList.contains("on")) { e.preventDefault(); scrollTo({ top: 0, behavior: "smooth" }); } }));
+$$(".tabbar button").forEach((a) => a.addEventListener("click", () => (a.classList.contains("on") ? scrollTo({ top: 0, behavior: "smooth" }) : (location.hash = a.dataset.href))));
 document.addEventListener("change", (e) => { if (e.target.matches(".sw")) haptic("tap"); });
 // iOS löst Haptik nur innerhalb einer echten Berührung (click) aus, nicht bei pointerdown
-document.addEventListener("click", (e) => { if (e.target.closest("button:not(:disabled), .tabbar a") && !hapticAge(60)) haptic("tap"); });
+document.addEventListener("click", (e) => { if (e.target.closest("button:not(:disabled)") && !hapticAge(60)) haptic("tap"); });
 addEventListener("hashchange", route);
 addEventListener("resize", refit);
 document.fonts?.addEventListener?.("loadingdone", refit);
